@@ -5,7 +5,7 @@ using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication
 {
-    internal class DeviceEventListener : IDisposable
+    internal sealed class DeviceEventListener : IDisposable
     {
         private const int EventPort = 11001;
 
@@ -24,9 +24,12 @@ namespace ACO08_Library.Communication
 
         public void StartListening()
         {
-            _isListening = true;
+            if (!IsListening)
+            {
+                _isListening = true;
 
-            _udpClient.BeginReceive(MessageReceivedCallback, _udpClient);
+                _udpClient.BeginReceive(MessageReceivedCallback, _udpClient); 
+            }
         }
 
         public void StopListening()
@@ -41,39 +44,37 @@ namespace ACO08_Library.Communication
 
         private void MessageReceivedCallback(IAsyncResult result)
         {
-            if (!_isListening)
+            if (_isListening)
             {
-                // Not listening for events anymore
-                return;
-            }
+                var dummy = new IPEndPoint(0, 0);
 
-            var dummy = new IPEndPoint(0, 0);
+                // TODO: Dispose Race Conditions verbessern
+                var message = _udpClient.EndReceive(result, ref dummy);
 
-            var message = _udpClient.EndReceive(result, ref dummy);
-
-            if (message.Length == 2)
-            {
-                var eventNumber = message[1];
-                
-                var eventType = (EventType) eventNumber;
-
-                switch (eventType)
+                if (message.Length == 2)
                 {
-                    case EventType.NewCrimpData:
-                        OnCrimpDataChanged();
-                        break;
+                    var eventNumber = message[1];
 
-                    case EventType.WorkmodeChanged:
-                        OnWorkmodeChanged();
-                        break;
+                    var eventType = (EventType)eventNumber;
 
-                    case EventType.MultireferenceChanged:
-                        OnMultireferenceChanged();
-                        break;
+                    switch (eventType)
+                    {
+                        case EventType.NewCrimpData:
+                            OnCrimpDataChanged();
+                            break;
+
+                        case EventType.WorkmodeChanged:
+                            OnWorkmodeChanged();
+                            break;
+
+                        case EventType.MultireferenceChanged:
+                            OnMultireferenceChanged();
+                            break;
+                    }
                 }
-            }
 
-            _udpClient.BeginReceive(MessageReceivedCallback, _udpClient);
+                _udpClient.BeginReceive(MessageReceivedCallback, _udpClient);
+            }
         }
 
         private void OnCrimpDataChanged()

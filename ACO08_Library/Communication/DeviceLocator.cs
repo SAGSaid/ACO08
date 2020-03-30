@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ACO08_Library.Communication
 {
-    internal class DeviceLocator : IDisposable
+    internal sealed class DeviceLocator : IDisposable
     {
         private const int BroadcastPort = 65531;
         private const string MessagePrefix = "CrimpNet_ACO08#";
@@ -39,31 +39,29 @@ namespace ACO08_Library.Communication
 
         private void MessageReceivedCallback(IAsyncResult result)
         {
-            if (!_isLocating)
+            if (_isLocating)
             {
-                // A new message has been received,
-                // but the instance isn't locating anymore.
-                return;
+                // This is a dummy variable reassigned below
+                var source = new IPEndPoint(0, 0);
+
+                // TODO: Dispose Race Condition verbessern
+                var message = _udpClient.EndReceive(result, ref source);
+
+                var messageString = Encoding.ASCII.GetString(message);
+
+                if (messageString.StartsWith(MessagePrefix))
+                {
+                    // Remove the prefix so only the serial number remains
+                    var serialString = messageString.Replace(MessagePrefix, string.Empty);
+
+                    // TODO: TryParse
+                    var serialNumber = uint.Parse(serialString);
+
+                    OnDeviceLocated(new DeviceLocatedEventArgs(serialNumber, source));
+                }
+
+                _udpClient.BeginReceive(MessageReceivedCallback, _udpClient);
             }
-
-            // This is a dummy variable reassigned below
-            var source = new IPEndPoint(0,0);
-
-            var message = _udpClient.EndReceive(result, ref source);
-
-            var messageString = Encoding.ASCII.GetString(message);
-
-            if (messageString.StartsWith(MessagePrefix))
-            {
-                // Remove the prefix so only the serial number remains
-                var serialString = messageString.Replace(MessagePrefix, string.Empty);
-                var serialNumber = uint.Parse(serialString);
-
-                OnDeviceLocated(new DeviceLocatedEventArgs(serialNumber, source));
-
-            }
-
-            _udpClient.BeginReceive(MessageReceivedCallback, _udpClient);
         }
 
         private void OnDeviceLocated(DeviceLocatedEventArgs args)
