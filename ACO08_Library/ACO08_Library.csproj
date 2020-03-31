@@ -44,7 +44,13 @@
     <Compile Include="Communication\DeviceEventListener.cs" />
     <Compile Include="Communication\DeviceLocatedEventArgs.cs" />
     <Compile Include="Communication\DeviceLocator.cs" />
+    <Compile Include="Enums\CommandId.cs" />
+    <Compile Include="Enums\CrimpState.cs" />
+    <Compile Include="Enums\DebugMessageType.cs" />
+    <Compile Include="Enums\ErrorId.cs" />
     <Compile Include="Enums\EventType.cs" />
+    <Compile Include="Enums\OptionId.cs" />
+    <Compile Include="Enums\Workmode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
