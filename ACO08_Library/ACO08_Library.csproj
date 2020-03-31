@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ACO_Time.cs" />
     <Compile Include="Communication\DeviceEventListener.cs" />
     <Compile Include="Communication\DeviceLocatedEventArgs.cs" />
     <Compile Include="Communication\DeviceLocator.cs" />
