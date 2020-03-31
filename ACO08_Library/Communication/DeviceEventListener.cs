@@ -48,32 +48,40 @@ namespace ACO08_Library.Communication
             {
                 var dummy = new IPEndPoint(0, 0);
 
-                // TODO: Dispose Race Conditions verbessern
-                var message = _udpClient.EndReceive(result, ref dummy);
-
-                if (message.Length == 2)
+                try
                 {
-                    var eventNumber = message[1];
+                    var message = _udpClient.EndReceive(result, ref dummy);
 
-                    var eventType = (EventType)eventNumber;
-
-                    switch (eventType)
+                    // Message is specified as a 16 Bit integer that identifies the event type.
+                    if (message.Length == 2)
                     {
-                        case EventType.NewCrimpData:
-                            OnCrimpDataChanged();
-                            break;
+                        var eventNumber = message[1];
 
-                        case EventType.WorkmodeChanged:
-                            OnWorkmodeChanged();
-                            break;
+                        var eventType = (EventType)eventNumber;
 
-                        case EventType.MultireferenceChanged:
-                            OnMultireferenceChanged();
-                            break;
+                        switch (eventType)
+                        {
+                            case EventType.NewCrimpData:
+                                OnCrimpDataChanged();
+                                break;
+
+                            case EventType.WorkmodeChanged:
+                                OnWorkmodeChanged();
+                                break;
+
+                            case EventType.MultireferenceChanged:
+                                OnMultireferenceChanged();
+                                break;
+                        }
                     }
-                }
 
-                _udpClient.BeginReceive(MessageReceivedCallback, _udpClient);
+                    _udpClient.BeginReceive(MessageReceivedCallback, _udpClient);
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Saveguards the possibility of a race condition between 
+                    // disposing and accessing the UDP-Client.
+                }
             }
         }
 
