@@ -41,10 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ACO_Time.cs" />
-    <Compile Include="Communication\DeviceEventListener.cs" />
-    <Compile Include="Communication\DeviceLocatedEventArgs.cs" />
-    <Compile Include="Communication\DeviceLocator.cs" />
+    <Compile Include="Communication\ACO_Time.cs" />
+    <Compile Include="Communication\Networking\DeviceEventListener.cs" />
+    <Compile Include="Communication\Networking\DeviceLocatedEventArgs.cs" />
+    <Compile Include="Communication\Networking\DeviceLocator.cs" />
+    <Compile Include="Communication\Protocol\CommandHeader.cs" />
+    <Compile Include="Enums\Channel.cs" />
     <Compile Include="Enums\CommandId.cs" />
     <Compile Include="Enums\CrimpState.cs" />
     <Compile Include="Enums\DebugMessageType.cs" />

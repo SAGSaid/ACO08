@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace ACO08_Library.Communication
+namespace ACO08_Library.Communication.Networking
 {
     public class DeviceLocatedEventArgs : EventArgs
     {

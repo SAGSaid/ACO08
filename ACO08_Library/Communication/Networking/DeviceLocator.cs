@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace ACO08_Library.Communication
+namespace ACO08_Library.Communication.Networking
 {
     internal sealed class DeviceLocator : IDisposable
     {

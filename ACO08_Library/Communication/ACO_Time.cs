@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ACO08_Library
+namespace ACO08_Library.Communication
 {
     internal class ACO_Time
     {
