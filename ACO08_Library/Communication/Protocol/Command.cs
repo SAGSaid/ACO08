@@ -29,6 +29,5 @@ namespace ACO08_Library.Communication.Protocol
             };
         }
 
-
     }
 }

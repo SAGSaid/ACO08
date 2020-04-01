@@ -5,21 +5,21 @@ namespace ACO08_Library.Communication.Protocol
 {
     internal class CommandHeader
     {
-        public CommandId CommandId { get; }
+        public CommandId Id { get; }
         public Channel Channel { get; set; }
         public byte Extension1 { get; set; }
         public byte Extension2 { get; set; }
 
-        public CommandHeader(CommandId commandId)
+        public CommandHeader(CommandId id)
         {
-            CommandId = commandId;
+            Id = id;
         }
 
         public List<byte> GetRawHeader()
         {
             return new List<byte>
             {
-                (byte)CommandId,
+                (byte)Id,
                 (byte)Channel,
                 Extension1,
                 Extension2
@@ -28,7 +28,7 @@ namespace ACO08_Library.Communication.Protocol
         
         public CommandHeader Copy()
         {
-            return new CommandHeader(CommandId)
+            return new CommandHeader(Id)
             {
                 Channel = Channel,
                 Extension1 = Extension1,

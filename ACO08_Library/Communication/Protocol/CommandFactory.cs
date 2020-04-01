@@ -1,28 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Protocol
 {
     internal class CommandFactory
     {
-        private List<Command> _commands;
+        private readonly Command[] _commands;
 
         public static CommandFactory Instance { get; } = new CommandFactory();
-
-        private CommandFactory()
-        {
-            InitializeAllCommands();
-        }
+        
 
         public Command GetCommand(CommandId commandId)
         {
-            return _commands.Find(comm => comm.Header.CommandId == commandId).Copy();
+            return _commands.First(comm => comm.Header.Id == commandId).Copy();
         }
 
-        private void InitializeAllCommands()
+        private CommandFactory()
         {
-            _commands = new List<Command>
+            _commands = new[]
             {
+                new Command(new CommandHeader(CommandId.GetVersion),
+                    Workmode.All)
+
                 // TODO implement templates for all commands
             };
         }
