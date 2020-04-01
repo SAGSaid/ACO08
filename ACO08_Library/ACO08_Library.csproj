@@ -48,6 +48,8 @@
     <Compile Include="Communication\Protocol\Command.cs" />
     <Compile Include="Communication\Protocol\CommandFactory.cs" />
     <Compile Include="Communication\Protocol\CommandHeader.cs" />
+    <Compile Include="Communication\Protocol\Option.cs" />
+    <Compile Include="Communication\Protocol\OptionFactory.cs" />
     <Compile Include="Enums\Channel.cs" />
     <Compile Include="Enums\CommandId.cs" />
     <Compile Include="Enums\CrimpState.cs" />
