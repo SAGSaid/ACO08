@@ -3,7 +3,7 @@
     internal enum EventType : byte
     {
         Undefined = 0,
-        NewCrimpData = 1,
+        CrimpDataChanged = 1,
         WorkmodeChanged = 2,
         MultireferenceChanged = 3
     }

@@ -45,6 +45,8 @@
     <Compile Include="Communication\Networking\DeviceEventListener.cs" />
     <Compile Include="Communication\Networking\DeviceLocatedEventArgs.cs" />
     <Compile Include="Communication\Networking\DeviceLocator.cs" />
+    <Compile Include="Communication\Protocol\Command.cs" />
+    <Compile Include="Communication\Protocol\CommandFactory.cs" />
     <Compile Include="Communication\Protocol\CommandHeader.cs" />
     <Compile Include="Enums\Channel.cs" />
     <Compile Include="Enums\CommandId.cs" />

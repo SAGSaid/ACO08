@@ -61,7 +61,7 @@ namespace ACO08_Library.Communication.Networking
 
                         switch (eventType)
                         {
-                            case EventType.NewCrimpData:
+                            case EventType.CrimpDataChanged:
                                 OnCrimpDataChanged();
                                 break;
 

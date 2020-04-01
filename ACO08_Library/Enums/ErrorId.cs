@@ -15,7 +15,7 @@
         Checksum = 10, 
         InvalidMode = 11, // Sent command is not allowed in current workmode
         FileAccessFailed = 12, 
-        InvalidParameter = 13, // Atleast one parameter is invalid
+        InvalidParameter = 13, // At least one parameter is invalid
         Transport = 14, // Generic error while receiving a frame
         UnknownOption = 15,
         InvalidValue = 16,
