@@ -9,7 +9,6 @@ namespace ACO08_Library.Communication.Protocol
         private readonly Predicate<T> _validateValue;
 
         public OptionId Id { get; }
-        public string Name { get; }
         public T DefaultValue { get; }
         public T Value
         {
@@ -23,7 +22,7 @@ namespace ACO08_Library.Communication.Protocol
             }
         }
 
-        internal Option(OptionId id, string name, T defaultValue, Predicate<T> validateValue = null)
+        internal Option(OptionId id, T defaultValue, Predicate<T> validateValue = null)
         {
             _validateValue = validateValue ?? (_ => true);
 
@@ -36,14 +35,13 @@ namespace ACO08_Library.Communication.Protocol
             }
 
             Id = id;
-            Name = name;
             DefaultValue = defaultValue;
             _value = defaultValue;
         }
 
         public Option<T> Copy()
         {
-            return new Option<T>(Id, Name, DefaultValue, _validateValue);
+            return new Option<T>(Id, DefaultValue, _validateValue);
         }
         
 
