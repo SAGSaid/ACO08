@@ -28,7 +28,7 @@ namespace ACO08_Library.Communication.Networking
             {
                 _isListening = true;
 
-                _udpClient.BeginReceive(MessageReceivedCallback, _udpClient); 
+                _udpClient.BeginReceive(EventReceivedCallback, _udpClient); 
             }
         }
 
@@ -42,7 +42,7 @@ namespace ACO08_Library.Communication.Networking
             get { return _isListening; }
         }
 
-        private void MessageReceivedCallback(IAsyncResult result)
+        private void EventReceivedCallback(IAsyncResult result)
         {
             if (_isListening)
             {
@@ -75,7 +75,7 @@ namespace ACO08_Library.Communication.Networking
                         }
                     }
 
-                    _udpClient.BeginReceive(MessageReceivedCallback, _udpClient);
+                    _udpClient.BeginReceive(EventReceivedCallback, _udpClient);
                 }
                 catch (ObjectDisposedException)
                 {

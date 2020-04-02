@@ -16,9 +16,9 @@ namespace ACO08_Library.Communication.Protocol
             AllowedWorkmodes = allowedWorkmodes;
         }
 
-        public List<byte> GetRawCommand()
+        public byte[] GetRawCommand()
         {
-            return Header.GetRawHeader().Concat(Body).ToList();
+            return Header.GetRawHeader().Concat(Body).ToArray();
         }
 
         public Command Copy()
