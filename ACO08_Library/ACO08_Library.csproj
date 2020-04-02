@@ -42,12 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Communication\ACO_Time.cs" />
+    <Compile Include="Communication\Networking\DeviceCommander.cs" />
     <Compile Include="Communication\Networking\DeviceEventListener.cs" />
     <Compile Include="Communication\Networking\DeviceLocatedEventArgs.cs" />
     <Compile Include="Communication\Networking\DeviceLocator.cs" />
     <Compile Include="Communication\Protocol\Command.cs" />
     <Compile Include="Communication\Protocol\CommandFactory.cs" />
     <Compile Include="Communication\Protocol\CommandHeader.cs" />
+    <Compile Include="Communication\Protocol\CommandResponse.cs" />
     <Compile Include="Communication\Protocol\Option.cs" />
     <Compile Include="Communication\Protocol\OptionFactory.cs" />
     <Compile Include="Enums\Channel.cs" />
