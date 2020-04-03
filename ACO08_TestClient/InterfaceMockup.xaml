@@ -14,7 +14,7 @@
         <Button HorizontalAlignment="Left" Margin="29,49,0,0" VerticalAlignment="Top" Width="158" Height="42">
             <TextBlock TextWrapping="Wrap" Text="ACO08 verbinden"/>
         </Button>
-        <Button Content="Neuester Crimp anzeigen" HorizontalAlignment="Left" Margin="29,158,0,0" VerticalAlignment="Top" Width="158" Height="38" Click="Button_Click"/>
-        <CheckBox Content="Automatisch neuester&#xD;&#xA; Crimp anzeigen" HorizontalAlignment="Left" Margin="29,212,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="158"/>
+        <Button Content="Neuester Crimp anzeigen" HorizontalAlignment="Left" Margin="29,158,0,0" VerticalAlignment="Top" Width="158" Height="38" />
+        <CheckBox Content="Automatisch neuester&#xD;&#xA; Crimp anzeigen" HorizontalAlignment="Left" Margin="29,212,0,0" VerticalAlignment="Top" Width="158"/>
     </Grid>
 </Window>

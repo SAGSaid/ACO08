@@ -18,6 +18,8 @@ namespace ACO08_Library
 
         public async Task<bool> Start()
         {
+            // TODO Start process needs to be taken apart into multiple methods to support SOLID
+            // TODO Cancelable
             try
             {
                 // Locate the device
@@ -38,8 +40,6 @@ namespace ACO08_Library
                 }
 
                 _listener = new DeviceEventListener(_deviceInfo.EndPoint.Address);
-
-
 
                 _listener.StartListening();
 
