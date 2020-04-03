@@ -11,7 +11,7 @@ namespace ACO08_Library.Communication.Networking
     internal class DeviceCommander : IDisposable
     {
         private const int Port = 11000;
-        private const int BufferLength = 1024;
+        private const int BufferLength = 8192;
 
         // Control signs
         private const byte STX = 0x02; // Start Text 

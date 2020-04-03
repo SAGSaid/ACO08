@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ACO08_Library.Communication
+namespace ACO08_Library.Data
 {
-    internal class ACO_Time
+    public class ACO_Time
     {
         private const byte Padding = 0;
 
