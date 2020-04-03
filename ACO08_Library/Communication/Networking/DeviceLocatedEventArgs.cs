@@ -3,7 +3,7 @@ using System.Net;
 
 namespace ACO08_Library.Communication.Networking
 {
-    public class DeviceLocatedEventArgs : EventArgs
+    internal class DeviceLocatedEventArgs : EventArgs
     {
         public uint SerialNumber { get; }
         public IPEndPoint EndPoint { get; }
