@@ -1,0 +1,20 @@
+﻿<Window x:Class="ACO08_TestClient.InterfaceMockup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ACO08_TestClient"
+        mc:Ignorable="d"
+        Title="InterfaceMockup" Height="450" Width="800">
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="375" Margin="225,10,0,0" VerticalAlignment="Top" Width="557">
+            <TextBlock HorizontalAlignment="Center" Margin="20,39,25,36" TextWrapping="Wrap" VerticalAlignment="Center" Height="249" Width="463" FontSize="40" Text="*DatenVisualisierung*"/>
+        </Border>
+        <TextBlock HorizontalAlignment="Left" Margin="29,306,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="69" Width="158" FontSize="20"><Run Text="*Meldungstext*"/><LineBreak/><Run Text="(Fehlerausgabe)"/></TextBlock>
+        <Button HorizontalAlignment="Left" Margin="29,49,0,0" VerticalAlignment="Top" Width="158" Height="42">
+            <TextBlock TextWrapping="Wrap" Text="ACO08 verbinden"/>
+        </Button>
+        <Button Content="Neuester Crimp anzeigen" HorizontalAlignment="Left" Margin="29,158,0,0" VerticalAlignment="Top" Width="158" Height="38" Click="Button_Click"/>
+        <CheckBox Content="Automatisch neuester&#xD;&#xA; Crimp anzeigen" HorizontalAlignment="Left" Margin="29,212,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="158"/>
+    </Grid>
+</Window>
