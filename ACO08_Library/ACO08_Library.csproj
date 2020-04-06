@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrimpDataReceivedEventArgs.cs" />
+    <Compile Include="Public\CrimpDataReceivedEventArgs.cs" />
     <Compile Include="Data\ACO_Time.cs" />
     <Compile Include="Communication\Networking\DeviceCommander.cs" />
     <Compile Include="Communication\Networking\DeviceEventListener.cs" />
@@ -63,7 +63,8 @@
     <Compile Include="Enums\OptionId.cs" />
     <Compile Include="Enums\Workmode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestClientInterface.cs" />
+    <Compile Include="Public\ACO08_Device.cs" />
+    <Compile Include="Public\TestClientInterface.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

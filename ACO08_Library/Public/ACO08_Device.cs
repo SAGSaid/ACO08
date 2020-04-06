@@ -1,56 +1,68 @@
 ﻿using System;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using ACO08_Library.Communication.Networking;
 using ACO08_Library.Communication.Protocol;
 using ACO08_Library.Data;
 using ACO08_Library.Enums;
 
-namespace ACO08_Library
+namespace ACO08_Library.Public
 {
-    public sealed class TestClientInterface : IDisposable
+    public sealed class ACO08_Device : IDisposable
     {
-        private DeviceLocatedEventArgs _deviceInfo;
-
         private DeviceEventListener _listener;
         private DeviceCommander _commander;
 
+        public uint SerialNumber { get; }
+        public IPEndPoint EndPoint { get; }
+
         public event EventHandler<CrimpDataReceivedEventArgs> CrimpDataReceived;
 
-        public async Task<bool> Start()
+
+        public ACO08_Device(uint serialNumber, IPEndPoint endPoint)
         {
-            // TODO Start process needs to be taken apart into multiple methods to support SOLID
-            // TODO Cancelable
+            SerialNumber = serialNumber;
+            EndPoint = endPoint;
+        }
+
+        public async Task BeginListeningForCrimpDataEvent(CancellationToken token)
+        {
             try
             {
-                // Locate the device
-                using (var locator = new DeviceLocator())
-                {
-                    locator.DeviceLocated += DeviceLocatedHandler;
-
-                    locator.StartLocating();
-
-                    while (_deviceInfo == null)
-                    {
-                        await Task.Delay(100);
-                    }
-
-                    locator.StopLocating();
-
-                    locator.DeviceLocated -= DeviceLocatedHandler;
-                }
-
-                _listener = new DeviceEventListener(_deviceInfo.EndPoint.Address);
+                _listener = new DeviceEventListener(EndPoint.Address);
 
                 _listener.StartListening();
 
-                _commander = new DeviceCommander(_deviceInfo.EndPoint.Address);
+                _listener.CrimpDataChanged += CrimpDataChangedHandler;
 
-                if (!_commander.Connect())
+                await Task.Delay(100, token);
+            }
+            catch (Exception)
+            {
+                // In case something goes wrong,
+                // we don't want that to screw the consumer of the method
+
+            }
+            finally
+            {
+                _listener.StopListening();
+                _listener.CrimpDataChanged -= CrimpDataChangedHandler;
+                _listener.Dispose();
+                _listener = null;
+            }
+        }
+
+        public async Task<bool> ConnectAsync()
+        {
+            try
+            {
+                _commander = new DeviceCommander(EndPoint.Address);
+
+                if (!await _commander.ConnectAsync())
                 {
                     throw new Exception("Connection failed.");
                 }
-                
-                _listener.CrimpDataChanged += CrimpDataChangedHandler;
 
                 // Go to workmode main, so the inital state is consistent.
                 var workmodeModeCommand = CommandFactory.Instance.GetCommand(CommandId.SetWorkmodeMain);
@@ -67,11 +79,6 @@ namespace ACO08_Library
             {
                 return false;
             }
-        }
-
-        private void DeviceLocatedHandler(object sender, DeviceLocatedEventArgs args)
-        {
-            _deviceInfo = args;
         }
 
         private void CrimpDataChangedHandler(object sender, EventArgs e)
@@ -92,6 +99,7 @@ namespace ACO08_Library
         {
             CrimpDataReceived?.Invoke(this, args);
         }
+
 
         public void Dispose()
         {

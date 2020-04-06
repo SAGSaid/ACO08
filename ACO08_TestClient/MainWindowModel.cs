@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ACO08_Library;
 using ACO08_Library.Data;
+using ACO08_Library.Public;
 
 namespace ACO08_TestClient
 {
@@ -34,32 +35,7 @@ namespace ACO08_TestClient
         }
 
 
-        public async Task<string> TryConnectClient()
-        {
-            IsConnected = await _client.Start();
 
-            if (IsConnected)
-            {
-                return "Successfully connected.";
-            }
-            else
-            {
-                return "Connecting failed.";
-            }
-        }
-
-        public void StartReceivingData()
-        {
-            if (IsConnected)
-            {
-                _client.CrimpDataReceived += DataReceived;
-            }
-        }
-
-        private void DataReceived(object sender, CrimpDataReceivedEventArgs e)
-        {
-            Data = e.Data;
-        }
 
 
         #region INotifyPropertyChanged

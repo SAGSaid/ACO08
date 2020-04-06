@@ -1,7 +1,7 @@
 ﻿using System;
 using ACO08_Library.Data;
 
-namespace ACO08_Library
+namespace ACO08_Library.Public
 {
     public class CrimpDataReceivedEventArgs : EventArgs
     {

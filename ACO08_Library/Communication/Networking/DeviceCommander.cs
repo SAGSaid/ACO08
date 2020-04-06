@@ -49,6 +49,26 @@ namespace ACO08_Library.Communication.Networking
             return false;
         }
 
+        public async Task<bool> ConnectAsync()
+        {
+            if (!_isConnected)
+            {
+                _isConnected = true;
+
+                try
+                {
+                    await _tcpClient.ConnectAsync(_deviceEndPoint.Address, Port);
+                    return true;
+                }
+                catch (SocketException)
+                {
+
+                }
+            }
+
+            return false;
+        }
+            
         public CommandResponse SendCommand(Command command)
         {
             if (_isConnected)
