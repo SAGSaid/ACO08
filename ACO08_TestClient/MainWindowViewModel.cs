@@ -1,15 +1,22 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ACO08_Library.Public;
 using ACO08_TestClient.Views;
+using AsyncAwaitBestPractices.MVVM;
 
 namespace ACO08_TestClient
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private ACO08_Device _selectedDevice;
         private DockPanel _container;
+        private CancellationTokenSource _locatingToken;
+
+        private ACO08_Device _selectedDevice;
+        private bool _isLocating = false;
 
         public TestClientInterface Model { get; } = new TestClientInterface();
 
@@ -24,14 +31,61 @@ namespace ACO08_TestClient
             }
         }
 
+        public bool IsLocating
+        {
+            get { return _isLocating; }
+            private set
+            {
+                _isLocating = value;
+                OnPropertyChanged();
+                StartDiscoveringCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public IAsyncCommand StartDiscoveringCommand { get; }
+        public ICommand StopDiscoveringCommand { get; }
+
+
 
         public MainWindowViewModel(DockPanel container)
         {
             _container = container;
             _container.Children.Add(new DiscoveryView());
+
+            #region Commands
+
+            StartDiscoveringCommand = new AsyncCommand(StartDiscoveringExecute, _ => !IsLocating);
+            StopDiscoveringCommand = new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
+
+            #endregion
         }
 
+        private async Task StartDiscoveringExecute()
+        {
+            if (!_isLocating)
+            {
+                IsLocating = true;
 
+                using (_locatingToken = new CancellationTokenSource())
+                {
+                    _locatingToken = new CancellationTokenSource();
+
+                    await Model.BeginLocatingDevices(_locatingToken.Token);
+                }
+
+                _locatingToken = null;
+            }
+        }
+
+        private void StopDiscoveringExecute(object parameter)
+        {
+            if (_isLocating)
+            {
+                IsLocating = false;
+                _locatingToken?.Cancel();
+            }
+        }
+        
 
 
 

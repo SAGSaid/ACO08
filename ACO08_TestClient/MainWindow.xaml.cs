@@ -9,10 +9,10 @@ namespace ACO08_TestClient
     {
         public MainWindow()
         {
-            var viewModel = new MainWindowViewModel(MainContainer);
-
-            DataContext = viewModel;
             InitializeComponent();
+
+            var viewModel = new MainWindowViewModel(MainContainer);
+            DataContext = viewModel;
         }
     }
 }

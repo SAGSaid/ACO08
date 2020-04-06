@@ -23,7 +23,10 @@ namespace ACO08_Library.Public
 
                 locator.StartLocating();
 
-                await Task.Delay(100, token);
+                while (!token.IsCancellationRequested)
+                {
+                    await Task.Delay(100, token);
+                }
             }
             catch (Exception)
             {
