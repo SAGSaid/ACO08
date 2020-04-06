@@ -84,7 +84,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindowModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Mockups\Version2\InterfaceMockupNr1V2.xaml.cs">
       <DependentUpon>InterfaceMockupNr1V2.xaml</DependentUpon>
