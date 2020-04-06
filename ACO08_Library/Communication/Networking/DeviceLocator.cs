@@ -52,7 +52,7 @@ namespace ACO08_Library.Communication.Networking
 
                         if (uint.TryParse(serialString, out var serialNumber))
                         {
-                            OnDeviceLocated(new DeviceLocatedEventArgs(serialNumber, source));
+                            OnDeviceLocated(new DeviceLocatedEventArgs(serialNumber, source.Address));
                         }
                     }
 

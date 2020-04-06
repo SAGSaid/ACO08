@@ -6,7 +6,5 @@
         xmlns:local="clr-namespace:ACO08_TestClient"
         mc:Ignorable="d"
         Title="TestClient" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel x:Name="MainContainer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"/>
 </Window>

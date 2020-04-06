@@ -43,7 +43,7 @@ namespace ACO08_Library.Public
             // The serial numbers are expected to be unique, so we can identify devices with them
             if (Devices.All(dev => dev.SerialNumber != args.SerialNumber))
             {
-                Devices.Add(new ACO08_Device(args.SerialNumber, args.EndPoint));
+                Devices.Add(new ACO08_Device(args.SerialNumber, args.Address));
             }
         }
 

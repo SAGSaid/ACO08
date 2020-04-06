@@ -6,12 +6,12 @@ namespace ACO08_Library.Communication.Networking
     internal class DeviceLocatedEventArgs : EventArgs
     {
         public uint SerialNumber { get; }
-        public IPEndPoint EndPoint { get; }
+        public IPAddress Address { get; }
 
-        internal DeviceLocatedEventArgs(uint serialNumber, IPEndPoint endPoint)
+        internal DeviceLocatedEventArgs(uint serialNumber, IPAddress address)
         {
             SerialNumber = serialNumber;
-            EndPoint = endPoint;
+            Address = address;
         }
     }
 }

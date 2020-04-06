@@ -20,7 +20,7 @@ namespace ACO08_Library.Public
         private bool _isConnected = false;
 
         public uint SerialNumber { get; }
-        public IPEndPoint EndPoint { get; }
+        public IPAddress Address { get; }
 
         public bool IsListeningForEvents
         {
@@ -45,10 +45,10 @@ namespace ACO08_Library.Public
         public event EventHandler<CrimpDataReceivedEventArgs> CrimpDataReceived;
 
 
-        public ACO08_Device(uint serialNumber, IPEndPoint endPoint)
+        public ACO08_Device(uint serialNumber, IPAddress address)
         {
             SerialNumber = serialNumber;
-            EndPoint = endPoint;
+            Address = address;
         }
 
         public async Task BeginListeningForCrimpDataEvent(CancellationToken token)
@@ -57,7 +57,7 @@ namespace ACO08_Library.Public
             {
                 try
                 {
-                    _listener = new DeviceEventListener(EndPoint.Address);
+                    _listener = new DeviceEventListener(Address);
 
                     _listener.StartListening();
 
@@ -91,7 +91,7 @@ namespace ACO08_Library.Public
             {
                 try
                 {
-                    _commander = new DeviceCommander(EndPoint.Address);
+                    _commander = new DeviceCommander(Address);
 
                     if (!await _commander.ConnectAsync())
                     {
