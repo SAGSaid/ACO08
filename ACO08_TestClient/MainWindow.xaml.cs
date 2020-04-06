@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using ACO08_Library.Public;
 
 namespace ACO08_TestClient
 {
@@ -10,8 +9,7 @@ namespace ACO08_TestClient
     {
         public MainWindow()
         {
-            var model = new TestClientInterface();
-            var viewModel = new MainWindowViewModel(model, MainContainer);
+            var viewModel = new MainWindowViewModel(MainContainer);
 
             DataContext = viewModel;
             InitializeComponent();

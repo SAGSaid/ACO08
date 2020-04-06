@@ -11,8 +11,8 @@ namespace ACO08_TestClient
         private ACO08_Device _selectedDevice;
         private DockPanel _container;
 
-        public TestClientInterface Model { get; }
-        
+        public TestClientInterface Model { get; } = new TestClientInterface();
+
 
         public ACO08_Device SelectedDevice
         {
@@ -25,13 +25,13 @@ namespace ACO08_TestClient
         }
 
 
-        public MainWindowViewModel(TestClientInterface model, DockPanel container)
+        public MainWindowViewModel(DockPanel container)
         {
-            Model = model;
             _container = container;
-
             _container.Children.Add(new DiscoveryView());
         }
+
+
 
 
 
