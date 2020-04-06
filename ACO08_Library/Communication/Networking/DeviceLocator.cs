@@ -32,11 +32,6 @@ namespace ACO08_Library.Communication.Networking
             _isLocating = false;
         }
 
-        public bool IsLocating
-        {
-            get { return _isLocating; }
-        }
-
         private void MessageReceivedCallback(IAsyncResult result)
         {
             if (_isLocating)
