@@ -46,7 +46,7 @@ namespace ACO08_Library.Communication.Protocol
         /// </summary>
         /// <param name="id">Which option to get</param>
         /// <returns>A copy of the requested option</returns>
-        /// <exception cref="InvalidOperationException">If the requested option isn't a integer option.</exception>
+        /// <exception cref="InvalidOperationException">If the requested option isn't an integer option.</exception>
         public Option<int> GetIntOption(OptionId id)
         {
             return _intOptions.First(option => option.Id == id).Copy();
