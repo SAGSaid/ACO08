@@ -13,7 +13,6 @@ namespace ACO08_TestClient
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private DockPanel _container;
-        private CancellationTokenSource _locatingToken;
 
         private ACO08_Device _selectedDevice;
         private bool _isLocating = false;
@@ -38,11 +37,10 @@ namespace ACO08_TestClient
             {
                 _isLocating = value;
                 OnPropertyChanged();
-                StartDiscoveringCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public IAsyncCommand StartDiscoveringCommand { get; }
+        public ICommand StartDiscoveringCommand { get; }
         public ICommand StopDiscoveringCommand { get; }
 
 
@@ -54,26 +52,18 @@ namespace ACO08_TestClient
 
             #region Commands
 
-            StartDiscoveringCommand = new AsyncCommand(StartDiscoveringExecute, _ => !IsLocating);
+            StartDiscoveringCommand = new RelayCommand(StartDiscoveringExecute, _ => !IsLocating);
             StopDiscoveringCommand = new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
 
             #endregion
         }
 
-        private async Task StartDiscoveringExecute()
+        private void StartDiscoveringExecute(object parameter)
         {
             if (!_isLocating)
             {
                 IsLocating = true;
-
-                using (_locatingToken = new CancellationTokenSource())
-                {
-                    _locatingToken = new CancellationTokenSource();
-
-                    await Model.BeginLocatingDevices(_locatingToken.Token);
-                }
-
-                _locatingToken = null;
+                Model.StartLocatingDevices();
             }
         }
 
@@ -82,7 +72,7 @@ namespace ACO08_TestClient
             if (_isLocating)
             {
                 IsLocating = false;
-                _locatingToken?.Cancel();
+                Model.StopLocatingDevices();
             }
         }
         

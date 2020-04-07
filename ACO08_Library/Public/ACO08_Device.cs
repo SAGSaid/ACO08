@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using ACO08_Library.Communication.Networking;
 using ACO08_Library.Communication.Protocol;
@@ -11,6 +10,9 @@ using ACO08_Library.Enums;
 
 namespace ACO08_Library.Public
 {
+    /// <summary>
+    /// Implements a public interface for device interaction.
+    /// </summary>
     public sealed class ACO08_Device : IDisposable, INotifyPropertyChanged
     {
         private DeviceEventListener _listener;
@@ -51,37 +53,28 @@ namespace ACO08_Library.Public
             Address = address;
         }
 
-        public async Task BeginListeningForCrimpDataEvent(CancellationToken token)
+        public void StartListeningForCrimpDataEvent()
         {
             if (!IsListeningForEvents)
             {
-                try
-                {
-                    _listener = new DeviceEventListener(Address);
+                IsListeningForEvents = true;
 
-                    _listener.StartListening();
+                _listener = new DeviceEventListener(Address);
+                _listener.StartListening();
+                _listener.CrimpDataChanged += CrimpDataChangedHandler;
+            }
+        }
 
-                    _listener.CrimpDataChanged += CrimpDataChangedHandler;
+        public void StopListeningForCrimpDataEvent()
+        {
+            if (IsListeningForEvents)
+            {
+                IsListeningForEvents = false;
 
-                    IsListeningForEvents = true;
-
-                    await Task.Delay(100, token);
-                }
-                catch (Exception)
-                {
-                    // In case something goes wrong,
-                    // we don't want that to screw the consumer of the method
-
-                }
-                finally
-                {
-                    IsListeningForEvents = false;
-
-                    _listener.StopListening();
-                    _listener.CrimpDataChanged -= CrimpDataChangedHandler;
-                    _listener.Dispose();
-                    _listener = null;
-                } 
+                _listener.StopListening();
+                _listener.CrimpDataChanged -= CrimpDataChangedHandler;
+                _listener.Dispose();
+                _listener = null; 
             }
         }
 
