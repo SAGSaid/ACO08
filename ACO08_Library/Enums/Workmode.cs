@@ -2,6 +2,9 @@
 
 namespace ACO08_Library.Enums
 {
+    /// <summary>
+    /// The different states of the device's state machine.
+    /// </summary>
     [Flags]
     public enum Workmode
     {

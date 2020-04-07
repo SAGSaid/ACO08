@@ -3,13 +3,24 @@ using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Protocol
 {
+    /// <summary>
+    /// Encapsulates the implementation details of the commands
+    /// according to specification V4.1.5. This class is a singleton. 
+    /// </summary>
     internal class CommandFactory
     {
         private readonly Command[] _commands;
 
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
         public static CommandFactory Instance { get; } = new CommandFactory();
         
-
+        /// <summary>
+        /// Gets a copy of the command according to the parameter.
+        /// </summary>
+        /// <param name="commandId">The ID of the command</param>
+        /// <returns>A copy of the requested command</returns>
         public Command GetCommand(CommandId commandId)
         {
             return _commands.First(comm => comm.Header.Id == commandId).Copy();

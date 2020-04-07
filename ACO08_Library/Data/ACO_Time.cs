@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace ACO08_Library.Data
 {
+    /// <summary>
+    /// Allows translation from the device's own time data type
+    /// to the more comfortable .NET DateTime and vice versa.
+    /// </summary>
     public class ACO_Time
     {
         private const byte Padding = 0;
@@ -38,11 +42,19 @@ namespace ACO08_Library.Data
             Second = (byte)time.Second;
         }
 
+        /// <summary>
+        /// Provides the instance's information in the .NET DateTime type
+        /// </summary>
+        /// <returns>DateTime of equal value</returns>
         public DateTime ToDateTime()
         {
             return new DateTime(YearMinus2000 + 2000, Month, Day, Hour, Minute, Second);
         }
 
+        /// <summary>
+        /// Provides the byte representation of the data structure.
+        /// </summary>
+        /// <returns>The instance's data in byte form</returns>
         public List<byte> ToBytes()
         {
             return new List<byte>

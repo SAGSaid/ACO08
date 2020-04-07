@@ -3,6 +3,9 @@ using System.Net;
 
 namespace ACO08_Library.Communication.Networking
 {
+    /// <summary>
+    /// Arguments that are sent with the DeviceLocator.DeviceLocated event.
+    /// </summary>
     internal class DeviceLocatedEventArgs : EventArgs
     {
         public uint SerialNumber { get; }

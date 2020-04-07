@@ -1,18 +1,18 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ACO08_Library.Public;
 using ACO08_TestClient.Views;
-using AsyncAwaitBestPractices.MVVM;
 
 namespace ACO08_TestClient
 {
+    /// <summary>
+    /// ViewModel for the application
+    /// </summary>
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private DockPanel _container;
+        private readonly DockPanel _container;
 
         private ACO08_Device _selectedDevice;
         private bool _isLocating = false;
@@ -50,7 +50,7 @@ namespace ACO08_TestClient
             _container = container;
             _container.Children.Add(new DiscoveryView());
 
-            #region Commands
+            #region Commands Init
 
             StartDiscoveringCommand = new RelayCommand(StartDiscoveringExecute, _ => !IsLocating);
             StopDiscoveringCommand = new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
@@ -75,8 +75,6 @@ namespace ACO08_TestClient
                 Model.StopLocatingDevices();
             }
         }
-        
-
 
 
         #region INotifyPropertyChanged

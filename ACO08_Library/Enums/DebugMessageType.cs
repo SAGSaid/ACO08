@@ -2,6 +2,9 @@
 
 namespace ACO08_Library.Enums
 {
+    /// <summary>
+    /// Mask for the debug messages
+    /// </summary>
     [Flags]
     public enum DebugMessageType
     {

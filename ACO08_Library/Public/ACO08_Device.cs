@@ -53,6 +53,9 @@ namespace ACO08_Library.Public
             Address = address;
         }
 
+        /// <summary>
+        /// Starts listening for the CrimpDataChanged event and invokes its own event.
+        /// </summary>
         public void StartListeningForCrimpDataEvent()
         {
             if (!IsListeningForEvents)
@@ -65,6 +68,9 @@ namespace ACO08_Library.Public
             }
         }
 
+        /// <summary>
+        /// Stops listening for events.
+        /// </summary>
         public void StopListeningForCrimpDataEvent()
         {
             if (IsListeningForEvents)
@@ -78,6 +84,10 @@ namespace ACO08_Library.Public
             }
         }
 
+        /// <summary>
+        /// Connects the TCP client for sending commands.
+        /// </summary>
+        /// <returns>Whether establishing the connection was successful</returns>
         public async Task<bool> ConnectAsync()
         {
             if (!IsConnected)
@@ -115,15 +125,18 @@ namespace ACO08_Library.Public
 
         private void CrimpDataChangedHandler(object sender, EventArgs e)
         {
-            var getCrimpData = CommandFactory.Instance.GetCommand(CommandId.GetCrimpData);
-
-            var response = _commander.SendCommand(getCrimpData);
-
-            if (!response.IsError)
+            if (_commander != null)
             {
-                var crimpData = new CrimpData(response.GetBody());
+                var getCrimpData = CommandFactory.Instance.GetCommand(CommandId.GetCrimpData);
 
-                OnCrimpDataReceived(new CrimpDataReceivedEventArgs(crimpData));
+                var response = _commander.SendCommand(getCrimpData);
+
+                if (!response.IsError)
+                {
+                    var crimpData = new CrimpData(response.GetBody());
+
+                    OnCrimpDataReceived(new CrimpDataReceivedEventArgs(crimpData));
+                } 
             }
         }
 
@@ -132,7 +145,9 @@ namespace ACO08_Library.Public
             CrimpDataReceived?.Invoke(this, args);
         }
 
-
+        /// <summary>
+        /// Disposes the underlying sockets.
+        /// </summary>
         public void Dispose()
         {
             _listener?.Dispose();

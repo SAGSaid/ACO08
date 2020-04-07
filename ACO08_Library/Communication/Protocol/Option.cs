@@ -3,6 +3,10 @@ using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Protocol
 {
+    /// <summary>
+    /// Encapsulates an option of the device in a generic way.
+    /// </summary>
+    /// <typeparam name="T">The underlying data type of the option</typeparam>
     public class Option<T>
     {
         private T _value;
@@ -39,6 +43,10 @@ namespace ACO08_Library.Communication.Protocol
             _value = defaultValue;
         }
 
+        /// <summary>
+        /// Copies the instance.
+        /// </summary>
+        /// <returns>A copy of the instance</returns>
         public Option<T> Copy()
         {
             return new Option<T>(Id, DefaultValue, _validateValue);

@@ -2,6 +2,9 @@
 
 namespace ACO08_Library.Enums
 {
+    /// <summary>
+    /// Contains information on a single crimp. Can be combined.
+    /// </summary>
     [Flags]
     public enum CrimpState : ushort
     {

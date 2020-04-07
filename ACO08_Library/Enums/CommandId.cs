@@ -1,5 +1,8 @@
 ﻿namespace ACO08_Library.Enums
 {
+    /// <summary>
+    /// Every command has a numeric ID. This enumeration contains all needed ID.
+    /// </summary>
     public enum CommandId : byte
     {
         GetVersion = 0,

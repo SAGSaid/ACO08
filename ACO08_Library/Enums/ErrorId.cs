@@ -1,5 +1,9 @@
 ﻿namespace ACO08_Library.Enums
 {
+    /// <summary>
+    /// A failed response gives information on what went wrong.
+    /// This enumeration gives more context to the numeric IDs.
+    /// </summary>
     public enum ErrorId : byte
     {
         Ok = 0, // No error

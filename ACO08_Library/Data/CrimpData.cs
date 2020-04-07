@@ -4,6 +4,9 @@ using ACO08_Library.Enums;
 
 namespace ACO08_Library.Data
 {
+    /// <summary>
+    /// Encapsulates a crimp data entity.
+    /// </summary>
     public class CrimpData
     {
         public uint ReferenceId { get; }

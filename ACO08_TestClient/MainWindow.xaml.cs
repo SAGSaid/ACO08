@@ -3,7 +3,7 @@
 namespace ACO08_TestClient
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Window for the TestClient
     /// </summary>
     public partial class MainWindow : Window
     {

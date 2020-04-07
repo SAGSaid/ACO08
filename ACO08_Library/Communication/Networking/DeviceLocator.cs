@@ -5,6 +5,10 @@ using System.Text;
 
 namespace ACO08_Library.Communication.Networking
 {
+    /// <summary>
+    /// Locates ACO08 devices on the network and
+    /// provides necessary information on them.
+    /// </summary>
     internal sealed class DeviceLocator : IDisposable
     {
         private const int BroadcastPort = 65531;
@@ -17,6 +21,10 @@ namespace ACO08_Library.Communication.Networking
 
         public event EventHandler<DeviceLocatedEventArgs> DeviceLocated; 
 
+        /// <summary>
+        /// Starts the locating devices and
+        /// invokes the appropriate event in case location is successful.
+        /// </summary>
         public void StartLocating()
         {
             if (!_isLocating)
@@ -27,6 +35,9 @@ namespace ACO08_Library.Communication.Networking
             }
         }
 
+        /// <summary>
+        /// Stops the locating process.
+        /// </summary>
         public void StopLocating()
         {
             _isLocating = false;
@@ -71,6 +82,9 @@ namespace ACO08_Library.Communication.Networking
             DeviceLocated?.Invoke(this, args);
         }
 
+        /// <summary>
+        /// Stops the locating process and disposes the underlying UDP client.
+        /// </summary>
         public void Dispose()
         {
             if (_isLocating)

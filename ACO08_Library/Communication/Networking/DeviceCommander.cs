@@ -8,6 +8,9 @@ using ACO08_Library.Communication.Protocol;
 
 namespace ACO08_Library.Communication.Networking
 {
+    /// <summary>
+    /// Manages the TCP connection with the device and sends/receives commands.
+    /// </summary>
     internal class DeviceCommander : IDisposable
     {
         private const int Port = 11000;
@@ -29,6 +32,10 @@ namespace ACO08_Library.Communication.Networking
             _tcpClient = new TcpClient(_deviceEndPoint);
         }
 
+        /// <summary>
+        /// Connects the underlying TCP client.
+        /// </summary>
+        /// <returns>If it successfully connected</returns>
         public bool Connect()
         {
             if (!_isConnected)
@@ -49,6 +56,10 @@ namespace ACO08_Library.Communication.Networking
             return false;
         }
 
+        /// <summary>
+        /// Connects the underlying TCP client asynchronously.
+        /// </summary>
+        /// <returns>Whether it successfully connected</returns>
         public async Task<bool> ConnectAsync()
         {
             if (!_isConnected)
@@ -69,6 +80,11 @@ namespace ACO08_Library.Communication.Networking
             return false;
         }
             
+        /// <summary>
+        /// Sends a command to the device.
+        /// </summary>
+        /// <param name="command">The command to be sent</param>
+        /// <returns>The device's response to the command.</returns>
         public CommandResponse SendCommand(Command command)
         {
             if (_isConnected)
@@ -98,6 +114,12 @@ namespace ACO08_Library.Communication.Networking
             throw new InvalidOperationException("The commander isn't connected to a device.");
         }
 
+        /// <summary>
+        /// Sends a command to the device asynchronously.
+        /// </summary>
+        /// <param name="command">The command to be sent</param>
+        /// <returns>The device's response to the command</returns>
+
         public async Task<CommandResponse> SendCommandAsync(Command command)
         {
             if (_isConnected)
@@ -120,7 +142,11 @@ namespace ACO08_Library.Communication.Networking
             throw new InvalidOperationException("The commander isn't connected to a device.");
         }
 
-
+        /// <summary>
+        /// Takes the raw data and transforms it according to protocol.
+        /// </summary>
+        /// <param name="rawData">The payload</param>
+        /// <returns>A frame of data, ready to be sent</returns>
         private byte[] PutDataIntoFrame(byte[] rawData)
         {
             // Every frame starts with two STX control signs
@@ -163,6 +189,11 @@ namespace ACO08_Library.Communication.Networking
             return buffer.ToArray();
         }
 
+        /// <summary>
+        /// Extracts the raw data from a frame.
+        /// </summary>
+        /// <param name="responseFrame">The frame wherein the data lies.</param>
+        /// <returns>The raw data</returns>
         private byte[] ExtractDataFromFrame(byte[] responseFrame)
         {
             var data = new List<byte>();
@@ -214,6 +245,9 @@ namespace ACO08_Library.Communication.Networking
             return byteToCheck == STX || byteToCheck == ETX || byteToCheck == DLE;
         }
 
+        /// <summary>
+        /// Closes the underlying TCP client.
+        /// </summary>
         public void Dispose()
         {
             _isConnected = false;

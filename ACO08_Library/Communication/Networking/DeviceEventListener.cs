@@ -5,6 +5,9 @@ using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Networking
 {
+    /// <summary>
+    /// Translates the device's UDP events into C# native events.
+    /// </summary>
     internal sealed class DeviceEventListener : IDisposable
     {
         private const int EventPort = 11001;
@@ -22,6 +25,9 @@ namespace ACO08_Library.Communication.Networking
             _udpClient = new UdpClient(new IPEndPoint(address, EventPort));
         }
 
+        /// <summary>
+        /// Starts listening on the network for UDP events.
+        /// </summary>
         public void StartListening()
         {
             if (!IsListening)
@@ -32,11 +38,17 @@ namespace ACO08_Library.Communication.Networking
             }
         }
 
+        /// <summary>
+        /// Stops listening on the network for UDP events.
+        /// </summary>
         public void StopListening()
         {
             _isListening = false;
         }
 
+        /// <summary>
+        /// Indicates whether the listener is activated.
+        /// </summary>
         public bool IsListening
         {
             get { return _isListening; }
@@ -87,20 +99,22 @@ namespace ACO08_Library.Communication.Networking
 
         private void OnCrimpDataChanged()
         {
-            CrimpDataChanged?.Invoke(this, EventArgs.Empty);
+            CrimpDataChanged?.Invoke(this, null);
         }
 
         private void OnWorkmodeChanged()
         {
-            WorkmodeChanged?.Invoke(this, EventArgs.Empty);
+            WorkmodeChanged?.Invoke(this, null);
         }
 
         private void OnMultireferenceChanged()
         {
-            MultireferenceChanged?.Invoke(this, EventArgs.Empty);
+            MultireferenceChanged?.Invoke(this, null);
         }
 
-
+        /// <summary>
+        /// Stops the listener and disposes the underlying UDP client.
+        /// </summary>
         public void Dispose()
         {
             if (_isListening)

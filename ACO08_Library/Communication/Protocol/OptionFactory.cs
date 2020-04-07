@@ -1,26 +1,52 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Protocol
 {
+    /// <summary>
+    /// Encapsulates the implementation details of the options
+    /// according to specification V4.1.5. This class is a singleton. 
+    /// </summary>
     internal class OptionFactory
     {
         private readonly Option<bool>[] _boolOptions;
         private readonly Option<float>[] _floatOptions;
         private readonly Option<int>[] _intOptions;
 
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
         public static OptionFactory Instance { get; } = new OptionFactory();
 
+        /// <summary>
+        /// Gets one of the boolean options
+        /// </summary>
+        /// <param name="id">Which option to get</param>
+        /// <returns>A copy of the requested option</returns>
+        /// <exception cref="InvalidOperationException">If the requested option isn't a boolean option.</exception>
         public Option<bool> GetBoolOption(OptionId id)
         {
             return _boolOptions.First(option => option.Id == id).Copy();
         }
 
+        /// <summary>
+        /// Gets one of the float options
+        /// </summary>
+        /// <param name="id">Which option to get</param>
+        /// <returns>A copy of the requested option</returns>
+        /// <exception cref="InvalidOperationException">If the requested option isn't a float option.</exception>
         public Option<float> GetFloatOption(OptionId id)
         {
             return _floatOptions.First(option => option.Id == id).Copy();
         }
 
+        /// <summary>
+        /// Gets one of the integer options
+        /// </summary>
+        /// <param name="id">Which option to get</param>
+        /// <returns>A copy of the requested option</returns>
+        /// <exception cref="InvalidOperationException">If the requested option isn't a integer option.</exception>
         public Option<int> GetIntOption(OptionId id)
         {
             return _intOptions.First(option => option.Id == id).Copy();

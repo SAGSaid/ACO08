@@ -1,5 +1,8 @@
 ﻿namespace ACO08_Library.Enums
 {
+    /// <summary>
+    /// The device's different events are numerically differentiated.
+    /// </summary>
     internal enum EventType : byte
     {
         Undefined = 0,

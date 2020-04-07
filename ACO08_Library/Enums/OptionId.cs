@@ -1,5 +1,8 @@
 ﻿namespace ACO08_Library.Enums
 {
+    /// <summary>
+    /// The option's numeric representation
+    /// </summary>
     public enum OptionId : byte
     {
         ReferenceCrimpAmount = 2,

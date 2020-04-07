@@ -4,6 +4,9 @@ using ACO08_Library.Communication.Networking;
 
 namespace ACO08_Library.Public
 {
+    /// <summary>
+    /// Public interface specifically made for the TestClient
+    /// </summary>
     public class TestClientInterface
     {
         private DeviceLocator _locator;
@@ -11,7 +14,9 @@ namespace ACO08_Library.Public
         public ObservableCollection<ACO08_Device> Devices { get; } = 
             new ObservableCollection<ACO08_Device>();
 
-
+        /// <summary>
+        /// Starts the location process
+        /// </summary>
         public void StartLocatingDevices()
         {
             if (_locator == null)
@@ -22,6 +27,9 @@ namespace ACO08_Library.Public
             }
         }
 
+        /// <summary>
+        /// Stops the location process
+        /// </summary>
         public void StopLocatingDevices()
         {
             if (_locator != null)
