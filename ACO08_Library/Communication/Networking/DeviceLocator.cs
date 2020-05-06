@@ -12,7 +12,7 @@ namespace ACO08_Library.Communication.Networking
     internal sealed class DeviceLocator : IDisposable
     {
         private const int BroadcastPort = 65531;
-        private const string MessagePrefix = "CrimpNet_ACO08#";
+        private const string MessagePrefix = "CrimpNet";
 
         private readonly UdpClient _udpClient = 
             new UdpClient(new IPEndPoint(IPAddress.Any, BroadcastPort));
@@ -58,8 +58,9 @@ namespace ACO08_Library.Communication.Networking
 
                     if (messageString.StartsWith(MessagePrefix))
                     {
-                        // Remove the prefix so only the serial number remains
-                        var serialString = messageString.Replace(MessagePrefix, string.Empty);
+                        // Take the part behind the hash sign to get the serial number
+                        var split = messageString.Split('#');
+                        var serialString = split[1];
 
                         if (uint.TryParse(serialString, out var serialNumber))
                         {

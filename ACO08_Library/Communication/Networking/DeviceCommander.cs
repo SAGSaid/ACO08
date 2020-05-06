@@ -16,7 +16,7 @@ namespace ACO08_Library.Communication.Networking
         private const int Port = 11000;
         private const int BufferLength = 8192;
 
-        // Control signs
+        // Protocol specific control signs
         private const byte STX = 0x02; // Start Text 
         private const byte ETX = 0x03; // End Text 
         private const byte DLE = 0x10; // Data Link escape, the byte after this byte is not interpreted as a control sign
