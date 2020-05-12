@@ -47,7 +47,7 @@ namespace ACO08_Library.Public
         public event EventHandler<CrimpDataReceivedEventArgs> CrimpDataReceived;
 
 
-        public ACO08_Device(uint serialNumber, IPAddress address)
+        internal ACO08_Device(uint serialNumber, IPAddress address)
         {
             SerialNumber = serialNumber;
             Address = address;

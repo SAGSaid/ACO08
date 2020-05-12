@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ACO08_Library.Communication.Networking;
 using ACO08_Library.Public;
 using ACO08_TestClient.Views;
 
@@ -17,8 +20,10 @@ namespace ACO08_TestClient
         private ACO08_Device _selectedDevice;
         private bool _isLocating = false;
 
-        public TestClientInterface Model { get; } = new TestClientInterface();
+        private DeviceLocator _locator;
 
+        public ObservableCollection<ACO08_Device> Devices { get; } =
+            new ObservableCollection<ACO08_Device>();
 
         public ACO08_Device SelectedDevice
         {
@@ -63,7 +68,9 @@ namespace ACO08_TestClient
             if (!_isLocating)
             {
                 IsLocating = true;
-                Model.StartLocatingDevices();
+                _locator = new DeviceLocator();
+                _locator.DeviceLocated += DeviceLocatedHandler;
+                _locator.StartLocating();
             }
         }
 
@@ -72,7 +79,17 @@ namespace ACO08_TestClient
             if (_isLocating)
             {
                 IsLocating = false;
-                Model.StopLocatingDevices();
+                _locator.StopLocating();
+                _locator.DeviceLocated -= DeviceLocatedHandler;
+                _locator.Dispose();
+            }
+        }
+
+        private void DeviceLocatedHandler(object sender, DeviceLocatedEventArgs args)
+        {
+            if (Devices.All(dev => dev.SerialNumber != args.Device.SerialNumber))
+            {
+                Devices.Add(args.Device);
             }
         }
 

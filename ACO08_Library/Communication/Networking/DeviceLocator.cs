@@ -9,7 +9,7 @@ namespace ACO08_Library.Communication.Networking
     /// Locates ACO08 devices on the network and
     /// provides necessary information on them.
     /// </summary>
-    internal sealed class DeviceLocator : IDisposable
+    public sealed class DeviceLocator : IDisposable
     {
         private const int BroadcastPort = 65531;
         private const string MessagePrefix = "CrimpNet";

@@ -64,7 +64,6 @@
     <Compile Include="Enums\Workmode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Public\ACO08_Device.cs" />
-    <Compile Include="Public\TestClientInterface.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
