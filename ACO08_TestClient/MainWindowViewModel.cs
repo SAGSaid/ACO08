@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ACO08_Library.Communication.Networking;
 using ACO08_Library.Public;
 using ACO08_TestClient.Views;
@@ -16,6 +17,7 @@ namespace ACO08_TestClient
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private readonly DockPanel _container;
+        private readonly Dispatcher _dispatcher;
 
         private ACO08_Device _selectedDevice;
         private bool _isLocating = false;
@@ -55,6 +57,8 @@ namespace ACO08_TestClient
             _container = container;
             _container.Children.Add(new DiscoveryView());
 
+            _dispatcher = Dispatcher.CurrentDispatcher;
+
             #region Commands Init
 
             StartDiscoveringCommand = new RelayCommand(StartDiscoveringExecute, _ => !IsLocating);
@@ -89,7 +93,7 @@ namespace ACO08_TestClient
         {
             if (Devices.All(dev => dev.SerialNumber != args.Device.SerialNumber))
             {
-                Devices.Add(args.Device);
+                _dispatcher.Invoke(() => Devices.Add(args.Device));
             }
         }
 
