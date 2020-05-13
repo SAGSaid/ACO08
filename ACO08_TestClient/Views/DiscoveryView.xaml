@@ -12,7 +12,7 @@
             <StackPanel Margin="5" Orientation="Horizontal">
                 <TextBlock Text="{Binding Path=SerialNumber}"/>
                 <TextBlock Text="{Binding Path=EndPoint.Address}"/>
-                <Button>Connect</Button>
+                <Button Command="{Binding Path=StartConnectingCommand}" CommandParameter="{Binding}">Connect</Button>
                 <Button>Cancel Connect</Button>
             </StackPanel>
         </DataTemplate>

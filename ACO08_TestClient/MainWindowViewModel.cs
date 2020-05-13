@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -21,6 +22,7 @@ namespace ACO08_TestClient
 
         private ACO08_Device _selectedDevice;
         private bool _isLocating = false;
+        private bool _isConnecting = false;
 
         private DeviceLocator _locator;
 
@@ -47,8 +49,22 @@ namespace ACO08_TestClient
             }
         }
 
+        public bool IsConnecting
+        {
+            get { return _isConnecting; }
+            private set
+            {
+                _isConnecting = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand StartDiscoveringCommand { get; }
         public ICommand StopDiscoveringCommand { get; }
+        public ICommand StartConnectingCommand { get; }
+        public ICommand StopConnectingCommand { get; }
+        public ICommand ClearDevicesCommand { get; }
+
 
 
 
@@ -61,9 +77,12 @@ namespace ACO08_TestClient
 
             #region Commands Init
 
-            StartDiscoveringCommand = new RelayCommand(StartDiscoveringExecute, _ => !IsLocating);
-            StopDiscoveringCommand = new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
-
+            StartDiscoveringCommand = 
+                new RelayCommand(StartDiscoveringExecute, _ => !IsLocating);
+            StopDiscoveringCommand = 
+                new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
+            StartConnectingCommand =
+                new RelayCommand(StartConnectingExecute, StartConnectingCanExecute);
             #endregion
         }
 
@@ -87,6 +106,33 @@ namespace ACO08_TestClient
                 _locator.DeviceLocated -= DeviceLocatedHandler;
                 _locator.Dispose();
             }
+        }
+
+        private async void StartConnectingExecute(object parameter)
+        {
+            if (parameter is ACO08_Device device)
+            {
+                IsConnecting = true;
+
+                bool isConnected = await device.ConnectAsync();
+
+                IsConnecting = false;
+
+                if (isConnected)
+                {
+                    _container.Children.Clear();
+                    _container.Children.Add(new DeviceView());
+                }
+                else
+                {
+                    MessageBox.Show("Connection failed.");
+                }
+            }
+        }
+
+        private bool StartConnectingCanExecute(object parameter)
+        {
+            return !IsConnecting
         }
 
         private void DeviceLocatedHandler(object sender, DeviceLocatedEventArgs args)
