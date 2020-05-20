@@ -10,10 +10,11 @@
     <UserControl.Resources>
         <DataTemplate x:Key="DeviceTemplate">
             <StackPanel Margin="5" Orientation="Horizontal">
-                <TextBlock Text="{Binding Path=SerialNumber}"/>
-                <TextBlock Text="{Binding Path=EndPoint.Address}"/>
-                <Button Command="{Binding Path=StartConnectingCommand}" CommandParameter="{Binding}">Connect</Button>
-                <Button>Cancel Connect</Button>
+                <TextBlock Text="{Binding Path=SerialNumber}" Margin="5"/>
+                <TextBlock Text="{Binding Path=Address}" Margin="5"/>
+                <Button Command="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.StartConnectingCommand}" 
+                        CommandParameter="{Binding Path=.}" Margin="5">Connect</Button>
+                <Button Margin="5">Cancel Connect</Button>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>

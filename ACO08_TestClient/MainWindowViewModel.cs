@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using System.Windows.Threading;
 using ACO08_Library.Communication.Networking;
 using ACO08_Library.Public;
 using ACO08_TestClient.Views;
+using AsyncAwaitBestPractices.MVVM;
 
 namespace ACO08_TestClient
 {
@@ -82,7 +84,7 @@ namespace ACO08_TestClient
             StopDiscoveringCommand = 
                 new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
             StartConnectingCommand =
-                new RelayCommand(StartConnectingExecute, StartConnectingCanExecute);
+                new AsyncCommand<object>(StartConnectingExecute, StartConnectingCanExecute);
             #endregion
         }
 
@@ -108,7 +110,7 @@ namespace ACO08_TestClient
             }
         }
 
-        private async void StartConnectingExecute(object parameter)
+        private async Task StartConnectingExecute(object parameter)
         {
             if (parameter is ACO08_Device device)
             {
@@ -132,7 +134,7 @@ namespace ACO08_TestClient
 
         private bool StartConnectingCanExecute(object parameter)
         {
-            return !IsConnecting
+            return !IsConnecting;
         }
 
         private void DeviceLocatedHandler(object sender, DeviceLocatedEventArgs args)
