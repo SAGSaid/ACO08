@@ -22,7 +22,7 @@ namespace ACO08_Library.Communication.Protocol
 
         public bool IsError
         {
-            get { return (RawData[0] | ErrorMask) > 0; }
+            get { return (RawData[0] & ErrorMask) > 0; }
         }
 
         /// <summary>

@@ -204,7 +204,7 @@ namespace ACO08_Library.Communication.Networking
             var data = new List<byte>();
 
             bool isNextByteEscaped = false;
-            int checkSum = 0;
+            byte checkSum = 0;
 
             // Escape control signs and add up the checksum
             foreach (byte b in responseFrame)
@@ -224,10 +224,14 @@ namespace ACO08_Library.Communication.Networking
                     // Frame is terminated, so the loop can be exited
                     break;
                 }
+                else if (b == STX)
+                {
+                    // Ignore the control sign
+                }
                 else
                 {
                     data.Add(b);
-                    checkSum -= b;
+                    checkSum += b;
                 }
             }
 
