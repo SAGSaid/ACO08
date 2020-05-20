@@ -21,7 +21,7 @@ namespace ACO08_Library.Communication.Networking
         private const byte ETX = 0x03; // End Text 
         private const byte DLE = 0x10; // Data Link escape, the byte after this byte is not interpreted as a control sign
 
-        private readonly TcpClient _tcpClient;
+        private TcpClient _tcpClient;
         private readonly IPEndPoint _deviceEndPoint;
 
         private bool _isConnected = false;
@@ -29,7 +29,6 @@ namespace ACO08_Library.Communication.Networking
         public DeviceCommander(IPAddress address)
         {
             _deviceEndPoint = new IPEndPoint(address, Port);
-            _tcpClient = new TcpClient(_deviceEndPoint);
         }
 
         /// <summary>
@@ -44,12 +43,14 @@ namespace ACO08_Library.Communication.Networking
 
                 try
                 {
+                    _tcpClient = new TcpClient(new IPEndPoint(IPAddress.Parse("192.168.1.11"), Port));
+
                     _tcpClient.Connect(_deviceEndPoint);
                     return true;
                 }
                 catch (SocketException)
                 {
-                    
+                    _tcpClient?.Close();
                 }
             }
 
@@ -68,12 +69,14 @@ namespace ACO08_Library.Communication.Networking
 
                 try
                 {
+                    _tcpClient = new TcpClient(new IPEndPoint(IPAddress.Parse("192.168.1.11"), Port));
+
                     await _tcpClient.ConnectAsync(_deviceEndPoint.Address, Port);
                     return true;
                 }
                 catch (SocketException)
                 {
-
+                    _tcpClient?.Close();
                 }
             }
 
@@ -222,7 +225,7 @@ namespace ACO08_Library.Communication.Networking
                 else
                 {
                     data.Add(b);
-                    checkSum += b;
+                    checkSum -= b;
                 }
             }
 
