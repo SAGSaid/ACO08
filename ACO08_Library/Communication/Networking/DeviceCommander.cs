@@ -43,6 +43,7 @@ namespace ACO08_Library.Communication.Networking
 
                 try
                 {
+                    // TODO: Change the hardcoded IP address
                     _tcpClient = new TcpClient(new IPEndPoint(IPAddress.Parse("192.168.1.11"), Port));
 
                     _tcpClient.Connect(_deviceEndPoint);
@@ -69,6 +70,7 @@ namespace ACO08_Library.Communication.Networking
 
                 try
                 {
+                    // TODO: Change the hardcoded IP address
                     _tcpClient = new TcpClient(new IPEndPoint(IPAddress.Parse("192.168.1.11"), Port));
 
                     await _tcpClient.ConnectAsync(_deviceEndPoint.Address, Port);
