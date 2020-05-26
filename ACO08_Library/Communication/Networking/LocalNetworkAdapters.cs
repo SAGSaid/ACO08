@@ -10,7 +10,8 @@ namespace ACO08_Library.Communication.Networking
     public static class LocalNetworkAdapters
     {
         // It is expected that communication only permeates over local /24 subnets
-        public static readonly byte[] Slash24SubnetMask = {255, 255, 255, 0};
+        private static readonly byte[] Slash24SubnetMaskBytes = {255, 255, 255, 0};
+        public static readonly IPAddress Slash24SubnetMask = new IPAddress(Slash24SubnetMaskBytes);
 
         /// <summary>
         /// Gets all IP-addresses of the system's network adapters that interface with Ethernet or Wireless Ethernet.
@@ -18,8 +19,9 @@ namespace ACO08_Library.Communication.Networking
         /// <returns>Sequence of found IP-addresses</returns>
         public static IEnumerable<IPAddress> GetIpAddresses()
         {
-            return GetEthernetInterfaces()
-                .Select(a => a.Address);
+            var interfaces = GetEthernetInterfaces();
+
+            return interfaces.Select(a => a.Address);
         }
 
         public static IPAddress GetSubnetMask(IPAddress address)

@@ -43,8 +43,9 @@ namespace ACO08_Library.Communication.Networking
 
                 try
                 {
-                    // TODO: Change the hardcoded IP address
-                    _tcpClient = new TcpClient(new IPEndPoint(IPAddress.Parse("192.168.1.11"), Port));
+                   
+                    _tcpClient = new TcpClient(
+                        new IPEndPoint(GetLocalSameSubnetIpAddress(), Port));
 
                     _tcpClient.Connect(_deviceEndPoint);
                     return true;
@@ -70,8 +71,8 @@ namespace ACO08_Library.Communication.Networking
 
                 try
                 {
-                    // TODO: Change the hardcoded IP address
-                    _tcpClient = new TcpClient(new IPEndPoint(IPAddress.Parse("192.168.1.11"), Port));
+                    _tcpClient = new TcpClient(
+                        new IPEndPoint(GetLocalSameSubnetIpAddress(), Port));
 
                     await _tcpClient.ConnectAsync(_deviceEndPoint.Address, Port);
                     return true;
@@ -252,6 +253,15 @@ namespace ACO08_Library.Communication.Networking
         private static bool IsControlSign(byte byteToCheck)
         {
             return byteToCheck == STX || byteToCheck == ETX || byteToCheck == DLE;
+        }
+
+        private IPAddress GetLocalSameSubnetIpAddress()
+        {
+            var subnet24addresses = LocalNetworkAdapters.GetIpAddresses()
+                .Where(LocalNetworkAdapters.IsSubnetMaskSlash24).ToList();
+
+            return subnet24addresses
+                    .First(addr => addr.IsInSameSubnet(_deviceEndPoint.Address, LocalNetworkAdapters.Slash24SubnetMask));
         }
 
         /// <summary>
