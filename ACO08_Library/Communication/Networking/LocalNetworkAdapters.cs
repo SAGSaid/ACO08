@@ -7,11 +7,10 @@ using System.Net.Sockets;
 
 namespace ACO08_Library.Communication.Networking
 {
-    public static class LocalNetworkAdapters
+    internal static class LocalNetworkAdapters
     {
         // It is expected that communication only permeates over local /24 subnets
-        private static readonly byte[] Slash24SubnetMaskBytes = {255, 255, 255, 0};
-        public static readonly IPAddress Slash24SubnetMask = new IPAddress(Slash24SubnetMaskBytes);
+        public static readonly IPAddress Slash24SubnetMask = new IPAddress(new byte[]{255, 255, 255, 0});
 
         /// <summary>
         /// Gets all IP-addresses of the system's network adapters that interface with Ethernet or Wireless Ethernet.
