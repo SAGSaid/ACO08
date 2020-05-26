@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Communication\Networking\LocalNetwork.cs" />
     <Compile Include="Public\CrimpDataReceivedEventArgs.cs" />
     <Compile Include="Data\ACO_Time.cs" />
     <Compile Include="Communication\Networking\DeviceCommander.cs" />
