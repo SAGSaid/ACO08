@@ -101,15 +101,6 @@ namespace ACO08_Library.Public
                         throw new Exception("Connection failed.");
                     }
 
-                    // Go to workmode main, so the inital state is consistent.
-                    var workmodeModeCommand = CommandFactory.Instance.GetCommand(CommandId.SetWorkmodeMain);
-                    var response = _commander.SendCommand(workmodeModeCommand);
-
-                    if (response.IsError)
-                    {
-                        throw new Exception("Setting the initial workmode to main failed.");
-                    }
-
                     IsConnected = true;
 
                     return true;
