@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ACO08_TestClient.ViewModels;
 
 namespace ACO08_TestClient
 {
@@ -11,7 +12,7 @@ namespace ACO08_TestClient
         {
             InitializeComponent();
 
-            var viewModel = new MainWindowViewModel(MainContainer);
+            var viewModel = new DiscoveryViewModel(MainContainer);
             DataContext = viewModel;
         }
     }

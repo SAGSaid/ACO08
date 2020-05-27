@@ -12,12 +12,9 @@ using ACO08_Library.Public;
 using ACO08_TestClient.Views;
 using AsyncAwaitBestPractices.MVVM;
 
-namespace ACO08_TestClient
+namespace ACO08_TestClient.ViewModels
 {
-    /// <summary>
-    /// ViewModel for the application
-    /// </summary>
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class DiscoveryViewModel : INotifyPropertyChanged
     {
         private readonly DockPanel _container;
         private readonly Dispatcher _dispatcher;
@@ -30,16 +27,6 @@ namespace ACO08_TestClient
 
         public ObservableCollection<ACO08_Device> Devices { get; } =
             new ObservableCollection<ACO08_Device>();
-
-        public ACO08_Device SelectedDevice
-        {
-            get { return _selectedDevice; }
-            private set
-            {
-                _selectedDevice = value;
-                OnPropertyChanged();
-            }
-        }
 
         public bool IsLocating
         {
@@ -66,10 +53,7 @@ namespace ACO08_TestClient
         public ICommand StartConnectingCommand { get; }
         public ICommand ClearDevicesCommand { get; }
 
-
-
-
-        public MainWindowViewModel(DockPanel container)
+        public DiscoveryViewModel(DockPanel container)
         {
             _container = container;
             _container.Children.Add(new DiscoveryView());
@@ -124,7 +108,7 @@ namespace ACO08_TestClient
                 if (isConnected)
                 {
                     _container.Children.Clear();
-                    _container.Children.Add(new DeviceView());
+                    _container.Children.Add(new DeviceView(device));
                 }
                 else
                 {
