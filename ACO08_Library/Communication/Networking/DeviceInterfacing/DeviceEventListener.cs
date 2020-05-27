@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using ACO08_Library.Enums;
 
-namespace ACO08_Library.Communication.Networking
+namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 {
     /// <summary>
     /// Translates the device's UDP events into C# native events.

@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace ACO08_Library.Communication.Networking
+namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 {
     /// <summary>
     /// Locates ACO08 devices on the network and

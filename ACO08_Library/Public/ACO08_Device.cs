@@ -4,6 +4,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ACO08_Library.Communication.Networking;
+using ACO08_Library.Communication.Networking.DeviceInterfacing;
 using ACO08_Library.Communication.Protocol;
 using ACO08_Library.Data;
 using ACO08_Library.Enums;

@@ -2,7 +2,7 @@
 using System.Net;
 using ACO08_Library.Public;
 
-namespace ACO08_Library.Communication.Networking
+namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 {
     /// <summary>
     /// Arguments that are sent with the DeviceLocator.DeviceLocated event.

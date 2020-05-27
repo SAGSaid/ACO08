@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using ACO08_Library.Communication.Protocol;
 
-namespace ACO08_Library.Communication.Networking
+namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 {
     /// <summary>
     /// Manages the TCP connection with the device and sends/receives commands.
@@ -43,9 +43,8 @@ namespace ACO08_Library.Communication.Networking
 
                 try
                 {
-                   
                     _tcpClient = new TcpClient(
-                        new IPEndPoint(GetLocalSameSubnetIpAddress(), Port));
+                        new IPEndPoint(GetLocalIp(), Port));
 
                     _tcpClient.Connect(_deviceEndPoint);
                     return true;
@@ -71,8 +70,7 @@ namespace ACO08_Library.Communication.Networking
 
                 try
                 {
-                    _tcpClient = new TcpClient(
-                        new IPEndPoint(GetLocalSameSubnetIpAddress(), Port));
+                    _tcpClient = new TcpClient(new IPEndPoint(GetLocalIp(), Port));
 
                     await _tcpClient.ConnectAsync(_deviceEndPoint.Address, Port);
                     return true;
@@ -255,13 +253,21 @@ namespace ACO08_Library.Communication.Networking
             return byteToCheck == STX || byteToCheck == ETX || byteToCheck == DLE;
         }
 
-        private IPAddress GetLocalSameSubnetIpAddress()
+        private IPAddress GetLocalIp()
         {
-            var subnet24addresses = LocalNetworkAdapters.GetIpAddresses()
-                .Where(LocalNetworkAdapters.IsSubnetMaskSlash24).ToList();
+            var selector = new NetworkInterfaceSelector();
 
-            return subnet24addresses
-                    .First(addr => addr.IsInSameSubnet(_deviceEndPoint.Address, LocalNetworkAdapters.Slash24SubnetMask));
+            var localIp = selector.GetLocalIpAddressInSameSubnet(_deviceEndPoint.Address, 
+                NetworkInterfaceSelector.Slash24SubnetMask);
+
+            if (selector == null)
+            {
+                throw new Exception("The ACO08 and this device are not in the same logical network. " +
+                                    "Please check the IP address and subnet mask configuration for both devices to ensure, " +
+                                    "that they are in the same network.");
+            }
+
+            return localIp;
         }
 
         /// <summary>
