@@ -64,7 +64,6 @@ namespace ACO08_TestClient
         public ICommand StartDiscoveringCommand { get; }
         public ICommand StopDiscoveringCommand { get; }
         public ICommand StartConnectingCommand { get; }
-        public ICommand StopConnectingCommand { get; }
         public ICommand ClearDevicesCommand { get; }
 
 
@@ -85,6 +84,8 @@ namespace ACO08_TestClient
                 new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
             StartConnectingCommand =
                 new AsyncCommand<object>(StartConnectingExecute, StartConnectingCanExecute);
+            ClearDevicesCommand = 
+                new RelayCommand(ClearDevicesExecute);
             #endregion
         }
 
@@ -135,6 +136,11 @@ namespace ACO08_TestClient
         private bool StartConnectingCanExecute(object parameter)
         {
             return !IsConnecting;
+        }
+
+        private void ClearDevicesExecute(object parameter)
+        {
+            _dispatcher.Invoke(() => Devices.Clear());
         }
 
         private void DeviceLocatedHandler(object sender, DeviceLocatedEventArgs args)
