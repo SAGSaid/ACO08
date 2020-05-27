@@ -101,10 +101,10 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 
                 // This means that we check the network every 50 milliseconds for possible reads
                 stream.ReadTimeout = 50;
-                int bytesReadFromStream;
 
                 var responseFrame = new byte[BufferLength];
-
+                int bytesReadFromStream;
+                
                 do
                 {
                     bytesReadFromStream = stream.Read(responseFrame, 0, BufferLength);
@@ -159,7 +159,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
                 STX, STX
             };
 
-            int checkSum = 0;
+            byte checkSum = 0;
 
             foreach (byte b in rawData)
             {
@@ -174,19 +174,18 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
                 buffer.Add(b);
             }
 
-            // Invert the checksum 
-            checkSum *= -1;
-
-            byte byteCheckSum = (byte)checkSum;
+            // Inverts the checksum 
+            // XOR the byte with a fully set bit mask to invert the checksum safely
+            checkSum ^= 0xFF;
 
             // In case the checksum must be escaped
-            if (IsControlSign(byteCheckSum))
+            if (IsControlSign(checkSum))
             {
                 buffer.Add(DLE);
             }
 
             // Second to last byte in frame is the checksum
-            buffer.Add(byteCheckSum);
+            buffer.Add(checkSum);
             // Frame is terminated with ETX control sign.
             buffer.Add(ETX);
 
