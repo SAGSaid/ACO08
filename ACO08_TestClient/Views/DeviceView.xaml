@@ -19,13 +19,17 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeReferenceCommand}">Reference</Button>
-            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeMeasureCommand}">Measure</Button>
-            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeMainCommand}">Main</Button>
+            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeReferenceCommand}" Margin="5">Reference</Button>
+            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeMeasureCommand}" Margin="5">Measure</Button>
+            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeMainCommand}" Margin="5">Main</Button>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1">
             <TextBlock>Current Workmode:</TextBlock>
             <TextBlock Text="{Binding Path=Device.CurrentWorkmode}"/><!--TODO maybe need to add converter to show the name-->
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="5">
+            <Button Command="{Binding Path=StartEventListenerCommand}">Listen for Events</Button>
+            <Button Command="{Binding Path=StopEventListenerCommand}">Stop listening for Events</Button>
         </StackPanel>
     </Grid>
 </UserControl>

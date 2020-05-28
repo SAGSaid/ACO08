@@ -14,13 +14,13 @@ namespace ACO08_TestClient.ViewModels
 {
     public class DeviceViewModel : INotifyPropertyChanged
     {
-        
-
         public ACO08_Device Device { get; }
 
         public ICommand SetWorkmodeMainCommand { get; }
         public ICommand SetWorkmodeMeasureCommand { get; }
         public ICommand SetWorkmodeReferenceCommand { get; }
+        public ICommand StartEventListenerCommand { get; }
+        public ICommand StopEventListenerCommand { get; }
 
         public DeviceViewModel(ACO08_Device device)
         {
@@ -29,14 +29,19 @@ namespace ACO08_TestClient.ViewModels
             #region Command Init
 
             SetWorkmodeMainCommand = new RelayCommand(SetWorkmodeMainExecute, 
-                _ => Device.IsConnected && Device.CurrentWorkmode != Workmode.Main);
+                _ => Device.CurrentWorkmode != Workmode.Main);
 
             SetWorkmodeMeasureCommand = new RelayCommand(SetWorkmodeMeasureExecute, 
-                _ => Device.IsConnected && Device.CurrentWorkmode != Workmode.Measure);
+                _ => Device.CurrentWorkmode != Workmode.Measure);
 
             SetWorkmodeReferenceCommand = new RelayCommand(SetWorkmodeReferenceExecute, 
-                _ => Device.IsConnected && Device.CurrentWorkmode != Workmode.Reference);
+                _ => Device.CurrentWorkmode != Workmode.Reference);
 
+            StartEventListenerCommand = new RelayCommand(_ => Device.StartListeningForCrimpDataEvent(),
+                _ => !Device.IsListeningForEvents);
+
+            StopEventListenerCommand = new RelayCommand(_ => Device.StartListeningForCrimpDataEvent(),
+                _ => Device.IsListeningForEvents);
             #endregion
         }
 

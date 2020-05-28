@@ -22,7 +22,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 
         public DeviceEventListener(IPAddress address)
         {
-            _udpClient = new UdpClient(new IPEndPoint(address, EventPort));
+            _udpClient = new UdpClient(new IPEndPoint(IPAddress.Any, EventPort));
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
                     // Message is specified as a 16 Bit integer that identifies the event type.
                     if (message.Length == 2)
                     {
-                        var eventNumber = message[1];
+                        var eventNumber = message[0];
 
                         var eventType = (EventType)eventNumber;
 
