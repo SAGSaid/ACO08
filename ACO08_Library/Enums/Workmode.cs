@@ -9,6 +9,7 @@ namespace ACO08_Library.Enums
     public enum Workmode
     {
         All = -1, // 0xFFFF_FFFF
+        Undefined = 0,
         Main = 0x0000_0001,
         Measure = 0x0000_0002,
         Reference = 0x0000_0004,

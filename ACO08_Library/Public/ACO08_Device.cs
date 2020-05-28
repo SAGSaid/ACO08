@@ -20,6 +20,7 @@ namespace ACO08_Library.Public
 
         private bool _isListeningForEvents = false;
         private bool _isConnected = false;
+        private Workmode _currentWorkmode = Workmode.Undefined;
 
         public uint SerialNumber { get; }
         public IPAddress Address { get; }
@@ -40,6 +41,16 @@ namespace ACO08_Library.Public
             private set
             {
                 _isConnected = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Workmode CurrentWorkmode
+        {
+            get { return _currentWorkmode; }
+            private set
+            {
+                _currentWorkmode = value;
                 OnPropertyChanged();
             }
         }
@@ -103,6 +114,8 @@ namespace ACO08_Library.Public
 
                     IsConnected = true;
 
+                    GetWorkmode();
+
                     return true;
                 }
                 catch (Exception)
@@ -135,6 +148,82 @@ namespace ACO08_Library.Public
         {
             CrimpDataReceived?.Invoke(this, args);
         }
+
+        #region Commands
+
+        public Workmode GetWorkmode()
+        {
+            if (_isConnected)
+            {
+                var command = CommandFactory.Instance.GetCommand(CommandId.GetWorkmode);
+
+                var response = _commander.SendCommand(command);
+
+                CurrentWorkmode = (Workmode)response.GetHeader().Extension1;
+
+                return CurrentWorkmode;
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+        }
+
+        public bool SetWorkmodeMain()
+        {
+            if (_isConnected)
+            {
+                var command = CommandFactory.Instance.GetCommand(CommandId.SetWorkmodeMain);
+
+                var response = _commander.SendCommand(command);
+
+                if (!response.IsError)
+                {
+                    CurrentWorkmode = Workmode.Main;
+                }
+
+                return !response.IsError;
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+        }
+
+        public bool SetWorkmodeMeasure()
+        {
+            if (_isConnected)
+            {
+                var command = CommandFactory.Instance.GetCommand(CommandId.SetWorkmodeMain);
+
+                var response = _commander.SendCommand(command);
+
+                if (!response.IsError)
+                {
+                    CurrentWorkmode = Workmode.Measure;
+                }
+                return !response.IsError;
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+        }
+
+        public bool SetWorkmodeReference()
+        {
+            if (_isConnected)
+            {
+                var command = CommandFactory.Instance.GetCommand(CommandId.SetWorkmodeMain);
+
+                var response = _commander.SendCommand(command);
+
+                if (!response.IsError)
+                {
+                    CurrentWorkmode = Workmode.Reference;
+                }
+
+                return !response.IsError;
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+        }
+
+        #endregion
 
         /// <summary>
         /// Disposes the underlying sockets.

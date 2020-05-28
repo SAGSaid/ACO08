@@ -18,9 +18,14 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="1" Grid.Column="0" Margin="20"></TextBox>
-        <Button Grid.Row="2" Grid.Column="0" Margin="20">Send Command</Button>
-        
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="20"></TextBox>
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeReferenceCommand}">Reference</Button>
+            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeMeasureCommand}">Measure</Button>
+            <Button MinWidth="80" Command="{Binding Path=SetWorkmodeMainCommand}">Main</Button>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <TextBlock>Current Workmode:</TextBlock>
+            <TextBlock Text="{Binding Path=Device.CurrentWorkmode}"/><!--TODO maybe need to add converter to show the name-->
+        </StackPanel>
     </Grid>
 </UserControl>
