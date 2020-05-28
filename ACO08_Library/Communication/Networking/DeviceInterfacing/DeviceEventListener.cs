@@ -20,7 +20,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
         public event EventHandler WorkmodeChanged;
         public event EventHandler MultireferenceChanged;
 
-        public DeviceEventListener(IPAddress address)
+        public DeviceEventListener()
         {
             _udpClient = new UdpClient(new IPEndPoint(IPAddress.Any, EventPort));
         }

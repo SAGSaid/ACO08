@@ -73,7 +73,7 @@ namespace ACO08_Library.Public
             {
                 IsListeningForEvents = true;
 
-                _listener = new DeviceEventListener(Address);
+                _listener = new DeviceEventListener();
                 _listener.StartListening();
                 _listener.CrimpDataChanged += CrimpDataChangedHandler;
             }
