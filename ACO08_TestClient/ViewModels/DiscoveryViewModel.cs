@@ -19,7 +19,6 @@ namespace ACO08_TestClient.ViewModels
         private readonly DockPanel _container;
         private readonly Dispatcher _dispatcher;
 
-        private ACO08_Device _selectedDevice;
         private bool _isLocating = false;
         private bool _isConnecting = false;
 
