@@ -25,11 +25,13 @@
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1">
             <TextBlock>Current Workmode:</TextBlock>
-            <TextBlock Text="{Binding Path=Device.CurrentWorkmode}"/><!--TODO maybe need to add converter to show the name-->
+            <TextBlock Text="{Binding Path=Device.CurrentWorkmode}"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="5">
             <Button Command="{Binding Path=StartEventListenerCommand}">Listen for Events</Button>
             <Button Command="{Binding Path=StopEventListenerCommand}">Stop listening for Events</Button>
         </StackPanel>
+
+        <Button Grid.Row="3" Command="{Binding Path=TempCommand}">TESTZWECKE</Button>
     </Grid>
 </UserControl>

@@ -40,7 +40,7 @@ namespace ACO08_Library.Communication.Protocol
 
             Id = id;
             DefaultValue = defaultValue;
-            _value = defaultValue;
+            Value = defaultValue;
         }
 
         /// <summary>

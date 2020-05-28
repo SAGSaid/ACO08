@@ -9,6 +9,6 @@
         None = 0,
         Channel1 = 1,
         Channel2 = 2,
-        BothChannels = 3
+        Both = 3
     }
 }

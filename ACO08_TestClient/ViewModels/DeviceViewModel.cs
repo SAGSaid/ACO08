@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ACO08_Library.Enums;
@@ -21,6 +16,7 @@ namespace ACO08_TestClient.ViewModels
         public ICommand SetWorkmodeReferenceCommand { get; }
         public ICommand StartEventListenerCommand { get; }
         public ICommand StopEventListenerCommand { get; }
+        public ICommand TempCommand { get; } //TODO Remove after done testing
 
         public DeviceViewModel(ACO08_Device device)
         {
@@ -39,9 +35,16 @@ namespace ACO08_TestClient.ViewModels
 
             StartEventListenerCommand = new RelayCommand(_ => Device.StartListeningForCrimpDataEvent(),
                 _ => !Device.IsListeningForEvents);
-
+            
             StopEventListenerCommand = new RelayCommand(_ => Device.StopListeningForCrimpDataEvent(),
                 _ => Device.IsListeningForEvents);
+
+            TempCommand = new RelayCommand(_ =>
+                {
+                    //var result = Device.SetOptionEnableInternalTrigger(true);
+                    var temp = Device.GetBooleanOption(OptionId.EnableInternalTrigger);
+                },
+                _ => Device.CurrentWorkmode == Workmode.Main);
             #endregion
         }
 

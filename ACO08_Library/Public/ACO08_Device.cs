@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -15,6 +16,10 @@ namespace ACO08_Library.Public
     /// </summary>
     public sealed class ACO08_Device : IDisposable, INotifyPropertyChanged
     {
+        // For some commands the device expects an int for what is essentially a bool.
+        private static readonly byte[] PaddedTrue = {1, 0, 0, 0};
+        private static readonly byte[] PaddedFalse = {0, 0, 0, 0};
+
         private DeviceEventListener _listener;
         private DeviceCommander _commander;
 
@@ -91,7 +96,7 @@ namespace ACO08_Library.Public
                 _listener.StopListening();
                 _listener.CrimpDataChanged -= CrimpDataChangedHandler;
                 _listener.Dispose();
-                _listener = null; 
+                _listener = null;
             }
         }
 
@@ -121,7 +126,7 @@ namespace ACO08_Library.Public
                 catch (Exception)
                 {
                     IsConnected = false;
-                } 
+                }
             }
 
             return false;
@@ -140,7 +145,7 @@ namespace ACO08_Library.Public
                     var crimpData = new CrimpData(response.GetBody());
 
                     OnCrimpDataReceived(new CrimpDataReceivedEventArgs(crimpData));
-                } 
+                }
             }
         }
 
@@ -150,6 +155,25 @@ namespace ACO08_Library.Public
         }
 
         #region Commands
+
+        public Version GetVersion()
+        {
+            if (_isConnected)
+            {
+                var command = CommandFactory.Instance.GetCommand(CommandId.GetVersion);
+
+                var response = _commander.SendCommand(command);
+
+                if (!response.IsError)
+                {
+                    var body = response.GetBody();
+                    
+                    return new Version(body[0], body[1], body[2]);
+                }
+            }
+
+            return null;
+        }
 
         public Workmode GetWorkmode()
         {
@@ -202,7 +226,78 @@ namespace ACO08_Library.Public
             throw new InvalidOperationException("The device is not connected.");
         }
 
+        #region Options
+
+        public bool SaveSetup()
+        {
+            if (_isConnected)
+            {
+                var command = CommandFactory.Instance.GetCommand(CommandId.SaveSetup);
+
+                var response = _commander.SendCommand(command);
+
+                return !response.IsError;
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+        }
+
+        public bool GetBooleanOption(OptionId id)
+        {
+            if (_isConnected)
+            {
+                var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
+
+                command.Header.Extension1 = (byte) id;
+
+                var response = _commander.SendCommand(command);
+
+                if (!response.IsError)
+                {
+                    // Is any of the bytes in the body set?
+                    return response.GetBody().Any(b => b != 0);
+                }
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+        }
+
+        public bool SetOptionEnableInternalTrigger(bool value)
+        {
+            return SetBooleanOption(OptionId.EnableInternalTrigger, value);
+        }
+
+        private bool SetBooleanOption(OptionId id, bool value)
+        {
+            if (_isConnected)
+            {
+                var option = OptionFactory.Instance.GetBoolOption(id);
+
+                option.Value = value;
+
+                var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
+
+                command.Header.Extension1 = (byte)option.Id;
+
+                // The device expects 4 bytes for a boolean value 
+                // (Probably just an int on the device)
+                var body = value ? PaddedTrue : PaddedFalse;
+
+                command.Body.AddRange(body);
+
+                var response = _commander.SendCommand(command);
+
+                return !response.IsError;
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+        }
+
         #endregion
+
+        #endregion
+
+
 
         /// <summary>
         /// Disposes the underlying sockets.
@@ -221,7 +316,7 @@ namespace ACO08_Library.Public
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        } 
+        }
         #endregion
     }
 }
