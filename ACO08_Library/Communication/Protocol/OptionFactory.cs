@@ -127,7 +127,7 @@ namespace ACO08_Library.Communication.Protocol
                     0,
                     val => val >= 0 && val <= 5),
                 new Option<int>(OptionId.SampleRate,
-                    0,
+                    1,
                     val => val >= 1 && val <= 4),
                 new Option<int>(OptionId.TriggerOffset,
                     0,
