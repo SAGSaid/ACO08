@@ -169,52 +169,31 @@ namespace ACO08_Library.Public
 
         public bool SetWorkmodeMain()
         {
-            if (_isConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.SetWorkmodeMain);
+            return SetWorkmode(Workmode.Main, CommandId.SetWorkmodeMain);
 
-                var response = _commander.SendCommand(command);
-
-                if (!response.IsError)
-                {
-                    CurrentWorkmode = Workmode.Main;
-                }
-
-                return !response.IsError;
-            }
-
-            throw new InvalidOperationException("The device is not connected.");
         }
 
         public bool SetWorkmodeMeasure()
         {
-            if (_isConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.SetWorkmodeMain);
-
-                var response = _commander.SendCommand(command);
-
-                if (!response.IsError)
-                {
-                    CurrentWorkmode = Workmode.Measure;
-                }
-                return !response.IsError;
-            }
-
-            throw new InvalidOperationException("The device is not connected.");
+            return SetWorkmode(Workmode.Measure, CommandId.SetWorkmodeReference);
         }
 
         public bool SetWorkmodeReference()
         {
+            return SetWorkmode(Workmode.Reference, CommandId.SetWorkmodeReference);
+        }
+
+        private bool SetWorkmode(Workmode workmode, CommandId id)
+        {
             if (_isConnected)
             {
-                var command = CommandFactory.Instance.GetCommand(CommandId.SetWorkmodeMain);
+                var command = CommandFactory.Instance.GetCommand(id);
 
                 var response = _commander.SendCommand(command);
 
                 if (!response.IsError)
                 {
-                    CurrentWorkmode = Workmode.Reference;
+                    CurrentWorkmode = workmode;
                 }
 
                 return !response.IsError;
