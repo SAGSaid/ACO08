@@ -40,7 +40,7 @@ namespace ACO08_TestClient.ViewModels
             StartEventListenerCommand = new RelayCommand(_ => Device.StartListeningForCrimpDataEvent(),
                 _ => !Device.IsListeningForEvents);
 
-            StopEventListenerCommand = new RelayCommand(_ => Device.StartListeningForCrimpDataEvent(),
+            StopEventListenerCommand = new RelayCommand(_ => Device.StopListeningForCrimpDataEvent(),
                 _ => Device.IsListeningForEvents);
             #endregion
         }
