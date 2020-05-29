@@ -72,7 +72,7 @@ namespace ACO08_Library.Public
         /// <summary>
         /// Starts listening for the CrimpDataChanged event and invokes its own event.
         /// </summary>
-        public void StartListeningForCrimpDataEvent()
+        public void StartListeningForEvents()
         {
             if (!IsListeningForEvents)
             {
@@ -81,13 +81,14 @@ namespace ACO08_Library.Public
                 _listener = new DeviceEventListener();
                 _listener.StartListening();
                 _listener.CrimpDataChanged += CrimpDataChangedHandler;
+                _listener.WorkmodeChanged += WorkmodeChangedHandler;
             }
         }
 
         /// <summary>
         /// Stops listening for events.
         /// </summary>
-        public void StopListeningForCrimpDataEvent()
+        public void StopListeningForEvents()
         {
             if (IsListeningForEvents)
             {
@@ -95,6 +96,7 @@ namespace ACO08_Library.Public
 
                 _listener.StopListening();
                 _listener.CrimpDataChanged -= CrimpDataChangedHandler;
+                _listener.WorkmodeChanged -= WorkmodeChangedHandler;
                 _listener.Dispose();
                 _listener = null;
             }
@@ -132,13 +134,13 @@ namespace ACO08_Library.Public
             return false;
         }
 
-        private void CrimpDataChangedHandler(object sender, EventArgs e)
+        private void CrimpDataChangedHandler(object sender, EventArgs args)
         {
-            if (_commander != null)
+            if (_isConnected)
             {
-                var getCrimpData = CommandFactory.Instance.GetCommand(CommandId.GetCrimpData);
+                var command = CommandFactory.Instance.GetCommand(CommandId.GetCrimpData);
 
-                var response = _commander.SendCommand(getCrimpData);
+                var response = _commander.SendCommand(command);
 
                 if (!response.IsError)
                 {
@@ -147,6 +149,11 @@ namespace ACO08_Library.Public
                     OnCrimpDataReceived(new CrimpDataReceivedEventArgs(crimpData));
                 }
             }
+        }
+
+        private void WorkmodeChangedHandler(object sender, EventArgs args)
+        {
+            GetWorkmode();
         }
 
         private void OnCrimpDataReceived(CrimpDataReceivedEventArgs args)
@@ -214,11 +221,6 @@ namespace ACO08_Library.Public
                 var command = CommandFactory.Instance.GetCommand(id);
 
                 var response = _commander.SendCommand(command);
-
-                if (!response.IsError)
-                {
-                    CurrentWorkmode = workmode;
-                }
 
                 return !response.IsError;
             }

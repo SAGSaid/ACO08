@@ -33,15 +33,15 @@ namespace ACO08_TestClient.ViewModels
             SetWorkmodeReferenceCommand = new RelayCommand(SetWorkmodeReferenceExecute, 
                 _ => Device.CurrentWorkmode != Workmode.Reference);
 
-            StartEventListenerCommand = new RelayCommand(_ => Device.StartListeningForCrimpDataEvent(),
+            StartEventListenerCommand = new RelayCommand(_ => Device.StartListeningForEvents(),
                 _ => !Device.IsListeningForEvents);
             
-            StopEventListenerCommand = new RelayCommand(_ => Device.StopListeningForCrimpDataEvent(),
+            StopEventListenerCommand = new RelayCommand(_ => Device.StopListeningForEvents(),
                 _ => Device.IsListeningForEvents);
 
             TempCommand = new RelayCommand(_ =>
                 {
-                    //var result = Device.SetOptionEnableInternalTrigger(true);
+                    var result = Device.SetOptionEnableInternalTrigger(true);
                     var temp = Device.GetBooleanOption(OptionId.EnableInternalTrigger);
                 },
                 _ => Device.CurrentWorkmode == Workmode.Main);
