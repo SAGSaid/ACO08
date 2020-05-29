@@ -14,8 +14,6 @@ namespace ACO08_TestClient.ViewModels
         public ICommand SetWorkmodeMainCommand { get; }
         public ICommand SetWorkmodeMeasureCommand { get; }
         public ICommand SetWorkmodeReferenceCommand { get; }
-        public ICommand StartEventListenerCommand { get; }
-        public ICommand StopEventListenerCommand { get; }
         public ICommand TempCommand { get; } //TODO Remove after done testing
 
         public DeviceViewModel(ACO08_Device device)
@@ -32,12 +30,6 @@ namespace ACO08_TestClient.ViewModels
 
             SetWorkmodeReferenceCommand = new RelayCommand(SetWorkmodeReferenceExecute, 
                 _ => Device.CurrentWorkmode != Workmode.Reference);
-
-            StartEventListenerCommand = new RelayCommand(_ => Device.StartListeningForEvents(),
-                _ => !Device.IsListeningForEvents);
-            
-            StopEventListenerCommand = new RelayCommand(_ => Device.StopListeningForEvents(),
-                _ => Device.IsListeningForEvents);
 
             TempCommand = new RelayCommand(_ =>
                 {

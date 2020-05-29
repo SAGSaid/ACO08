@@ -121,6 +121,7 @@ namespace ACO08_Library.Public
 
                     IsConnected = true;
 
+                    StartListeningForEvents();
                     GetWorkmode();
 
                     return true;
