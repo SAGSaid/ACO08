@@ -201,21 +201,21 @@ namespace ACO08_Library.Public
 
         public bool SetWorkmodeMain()
         {
-            return SetWorkmode(Workmode.Main, CommandId.SetWorkmodeMain);
+            return SetWorkmode(CommandId.SetWorkmodeMain);
 
         }
 
         public bool SetWorkmodeMeasure()
         {
-            return SetWorkmode(Workmode.Measure, CommandId.SetWorkmodeReference);
+            return SetWorkmode(CommandId.SetWorkmodeReference);
         }
 
         public bool SetWorkmodeReference()
         {
-            return SetWorkmode(Workmode.Reference, CommandId.SetWorkmodeReference);
+            return SetWorkmode(CommandId.SetWorkmodeReference);
         }
 
-        private bool SetWorkmode(Workmode workmode, CommandId id)
+        private bool SetWorkmode(CommandId id)
         {
             if (_isConnected)
             {

@@ -33,8 +33,7 @@ namespace ACO08_TestClient.ViewModels
 
             TempCommand = new RelayCommand(_ =>
                 {
-                    var result = Device.SetOptionEnableInternalTrigger(true);
-                    var temp = Device.GetBooleanOption(OptionId.EnableInternalTrigger);
+                    var result = Device.GetBooleanOption(OptionId.EnableAutoReference);
                 },
                 _ => Device.CurrentWorkmode == Workmode.Main);
             #endregion

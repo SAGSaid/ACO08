@@ -6,7 +6,7 @@ using ACO08_Library.Enums;
 namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 {
     /// <summary>
-    /// Translates the device's UDP events into C# native events.
+    /// Translates the device's UDP events into native C# events.
     /// </summary>
     internal sealed class DeviceEventListener : IDisposable
     {
