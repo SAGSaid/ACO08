@@ -56,10 +56,9 @@ namespace ACO08_Library.Communication.Protocol
             }
             else
             {
-                return new byte[0];
+                return Array.Empty<byte>();
             }
         }
-
 
     }
 }

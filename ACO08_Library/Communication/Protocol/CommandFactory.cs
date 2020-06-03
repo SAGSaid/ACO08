@@ -138,7 +138,7 @@ namespace ACO08_Library.Communication.Protocol
                 new Command(
                     new CommandHeader(CommandId.GetOptionList)
                     {
-                        Channel = Channel.Channel1
+                        Channel = Channel.None
                     },
                     Workmode.Main),
 

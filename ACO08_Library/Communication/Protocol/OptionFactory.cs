@@ -138,8 +138,6 @@ namespace ACO08_Library.Communication.Protocol
                 new Option<int>(OptionId.DebugMessageTypes,
                     5,
                     val => val >= 0 && val <= 15),
-                new Option<int>(OptionId.GPIO_Function,
-                    0),
                 new Option<int>(OptionId.ActiveChannel,
                     1,
                     val => val >= 1 && val <= 3),

@@ -29,7 +29,6 @@
         ShiftCurvePeak = 23,
         EnableLCD = 24,
         DebugMessageTypes = 25,
-        GPIO_Function = 26,
         EnableAutoReference = 27,
         ActiveChannel = 28,
         DefaultIP = 29,

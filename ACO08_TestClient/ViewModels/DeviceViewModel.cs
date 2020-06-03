@@ -33,7 +33,7 @@ namespace ACO08_TestClient.ViewModels
 
             TempCommand = new RelayCommand(_ =>
                 {
-                    var result = Device.GetBooleanOption(OptionId.EnableAutoReference);
+                    var result = Device.GetOptionList();
                 },
                 _ => Device.CurrentWorkmode == Workmode.Main);
             #endregion

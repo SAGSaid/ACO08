@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using ACO08_Library.Communication.Networking.DeviceInterfacing;
 using ACO08_Library.Communication.Protocol;
@@ -230,6 +232,57 @@ namespace ACO08_Library.Public
         }
 
         #region Options
+
+        public string GetOptionList()
+        {
+            if (_isConnected)
+            {
+                var command = CommandFactory.Instance.GetCommand(CommandId.GetOptionList);
+
+                var response = SendCommandWithMultiPacketResponse(command);
+
+                if (response.IsError)
+                {
+                    return string.Empty;
+                }
+
+                return Encoding.Unicode.GetString(response.GetBody());
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+
+        }
+
+        private CommandResponse SendCommandWithMultiPacketResponse(Command command)
+        {
+            var initialResponse = _commander.SendCommand(command);
+
+            if (!initialResponse.IsError && initialResponse.GetHeader().Extension2 == 0)
+            {
+                var nextBlockCommand = CommandFactory.Instance.GetCommand(CommandId.NextBlock);
+                nextBlockCommand.Header.Channel = Channel.None;
+                var additionalData = new List<byte>();
+
+                CommandResponse response;
+
+                do
+                {
+                    response = _commander.SendCommand(nextBlockCommand);
+
+                    if (!response.IsError)
+                    {
+                        additionalData.AddRange(response.GetBody());
+                    }
+
+                } while (response.GetHeader().Extension2 == 0);
+
+                // Concatenate the initial response's data with the additional data.
+                initialResponse = new CommandResponse(
+                    initialResponse.RawData.Concat(additionalData).ToArray(), command);
+            }
+
+            return initialResponse;
+        }
 
         public bool SaveSetup()
         {
