@@ -76,7 +76,7 @@ namespace ACO08_Library.Public
         /// </summary>
         public void StartListeningForEvents()
         {
-            if (!IsListeningForEvents)
+            if (!_isListeningForEvents)
             {
                 IsListeningForEvents = true;
 
@@ -92,7 +92,7 @@ namespace ACO08_Library.Public
         /// </summary>
         public void StopListeningForEvents()
         {
-            if (IsListeningForEvents)
+            if (_isListeningForEvents)
             {
                 IsListeningForEvents = false;
 
@@ -110,7 +110,7 @@ namespace ACO08_Library.Public
         /// <returns>Whether establishing the connection was successful</returns>
         public async Task<bool> ConnectAsync()
         {
-            if (!IsConnected)
+            if (!_isConnected)
             {
                 try
                 {
@@ -182,7 +182,7 @@ namespace ACO08_Library.Public
                 }
             }
 
-            return null;
+            return new Version();
         }
 
         public Workmode GetWorkmode()
@@ -250,39 +250,9 @@ namespace ACO08_Library.Public
             }
 
             throw new InvalidOperationException("The device is not connected.");
-
         }
 
-        private CommandResponse SendCommandWithMultiPacketResponse(Command command)
-        {
-            var initialResponse = _commander.SendCommand(command);
 
-            if (!initialResponse.IsError && initialResponse.GetHeader().Extension2 == 0)
-            {
-                var nextBlockCommand = CommandFactory.Instance.GetCommand(CommandId.NextBlock);
-                nextBlockCommand.Header.Channel = Channel.None;
-                var additionalData = new List<byte>();
-
-                CommandResponse response;
-
-                do
-                {
-                    response = _commander.SendCommand(nextBlockCommand);
-
-                    if (!response.IsError)
-                    {
-                        additionalData.AddRange(response.GetBody());
-                    }
-
-                } while (response.GetHeader().Extension2 == 0);
-
-                // Concatenate the initial response's data with the additional data.
-                initialResponse = new CommandResponse(
-                    initialResponse.RawData.Concat(additionalData).ToArray(), command);
-            }
-
-            return initialResponse;
-        }
 
         public bool SaveSetup()
         {
@@ -350,6 +320,42 @@ namespace ACO08_Library.Public
         }
 
         #endregion
+
+        private CommandResponse SendCommandWithMultiPacketResponse(Command command)
+        {
+            if (_isConnected)
+            {
+                var initialResponse = _commander.SendCommand(command);
+
+                if (!initialResponse.IsError && initialResponse.GetHeader().Extension2 == 0)
+                {
+                    var nextBlockCommand = CommandFactory.Instance.GetCommand(CommandId.NextBlock);
+                    nextBlockCommand.Header.Channel = Channel.None;
+                    var additionalData = new List<byte>();
+
+                    CommandResponse response;
+
+                    do
+                    {
+                        response = _commander.SendCommand(nextBlockCommand);
+
+                        if (!response.IsError)
+                        {
+                            additionalData.AddRange(response.GetBody());
+                        }
+
+                    } while (response.GetHeader().Extension2 == 0);
+
+                    // Concatenate the initial response's data with the additional data.
+                    initialResponse = new CommandResponse(
+                        initialResponse.RawData.Concat(additionalData).ToArray(), command);
+                }
+
+                return initialResponse; 
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+        }
 
         #endregion
 
