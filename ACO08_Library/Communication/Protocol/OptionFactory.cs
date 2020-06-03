@@ -14,6 +14,10 @@ namespace ACO08_Library.Communication.Protocol
         private readonly Option<float>[] _floatOptions;
         private readonly Option<int>[] _intOptions;
 
+        public OptionId[] BoolOptions { get; }
+        public OptionId[] FloatOptions { get; }
+        public OptionId[] IntOptions { get; }
+
         /// <summary>
         /// Singleton instance
         /// </summary>
@@ -27,7 +31,12 @@ namespace ACO08_Library.Communication.Protocol
         /// <exception cref="InvalidOperationException">If the requested option isn't a boolean option.</exception>
         public Option<bool> GetBoolOption(OptionId id)
         {
-            return _boolOptions.First(option => option.Id == id).Copy();
+            if (BoolOptions.Contains(id))
+            {
+                return _boolOptions.First(option => option.Id == id).Copy();
+            }
+
+            throw new InvalidOperationException("The requested option isn't of bool type.");
         }
 
         /// <summary>
@@ -38,7 +47,13 @@ namespace ACO08_Library.Communication.Protocol
         /// <exception cref="InvalidOperationException">If the requested option isn't a float option.</exception>
         public Option<float> GetFloatOption(OptionId id)
         {
-            return _floatOptions.First(option => option.Id == id).Copy();
+
+            if (FloatOptions.Contains(id))
+            {
+                return _floatOptions.First(option => option.Id == id).Copy(); 
+            }
+
+            throw new InvalidOperationException("The requested option isn't of float type.");
         }
 
         /// <summary>
@@ -49,7 +64,12 @@ namespace ACO08_Library.Communication.Protocol
         /// <exception cref="InvalidOperationException">If the requested option isn't an integer option.</exception>
         public Option<int> GetIntOption(OptionId id)
         {
-            return _intOptions.First(option => option.Id == id).Copy();
+            if (IntOptions.Contains(id))
+            {
+                return _intOptions.First(option => option.Id == id).Copy();
+            }
+
+            throw new InvalidOperationException("The requested option isn't of int type.");
         }
 
         private OptionFactory()
@@ -84,9 +104,10 @@ namespace ACO08_Library.Communication.Protocol
                     false),
                 new Option<bool>(OptionId.CheckEnvelope,
                     false)
-
             };
 
+            BoolOptions = _boolOptions.Select(option => option.Id).ToArray();
+            
             _floatOptions = new[]
             {
                 new Option<float>(OptionId.CalibrationFactor,
@@ -111,6 +132,8 @@ namespace ACO08_Library.Communication.Protocol
                     90.0f,
                     val => val >= 1 && val <= 90)
             };
+
+            FloatOptions = _floatOptions.Select(option => option.Id).ToArray();
 
             _intOptions = new[]
             {
@@ -153,6 +176,8 @@ namespace ACO08_Library.Communication.Protocol
                     10,
                     val => val >= 1 && val <= 20)
             };
+
+            IntOptions = _intOptions.Select(option => option.Id).ToArray();
         }
     }
 }
