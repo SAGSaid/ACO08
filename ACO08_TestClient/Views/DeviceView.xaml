@@ -28,7 +28,9 @@
             <TextBlock Text="{Binding Path=Device.CurrentWorkmode}"/>
         </StackPanel>
 
+        <Button Grid.Row="1" Grid.Column="1" Width="100" Height="60" Command="{Binding Path=ShowOptionDialogCommand}">Options</Button>
 
-        <Button Grid.Row="3" Command="{Binding Path=TempCommand}">TESTZWECKE</Button>
+
+        <Button Grid.Row="2" Grid.Column="0" Command="{Binding Path=TempCommand}">TESTZWECKE</Button>
     </Grid>
 </UserControl>
