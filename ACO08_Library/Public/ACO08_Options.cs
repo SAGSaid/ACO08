@@ -31,9 +31,14 @@ namespace ACO08_Library.Public
             IntOptions = factory.GetAllIntOptions();
         }
 
+        public bool IsConnected
+        {
+            get { return Commander?.IsConnected ?? false; }
+        }
+
         public string GetOptionList()
         {
-            if (Commander.IsConnected)
+            if (IsConnected)
             {
                 var command = CommandFactory.Instance.GetCommand(CommandId.GetOptionList);
 
@@ -54,7 +59,7 @@ namespace ACO08_Library.Public
 
         public bool SaveSetup()
         {
-            if (Commander.IsConnected)
+            if (IsConnected)
             {
                 var command = CommandFactory.Instance.GetCommand(CommandId.SaveSetup);
 
@@ -68,7 +73,7 @@ namespace ACO08_Library.Public
 
         public bool GetBooleanOption(OptionId id)
         {
-            if (Commander.IsConnected)
+            if (IsConnected)
             {
                 var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
 
@@ -93,7 +98,7 @@ namespace ACO08_Library.Public
 
         private bool SetBooleanOption(OptionId id, bool value)
         {
-            if (Commander.IsConnected)
+            if (IsConnected)
             {
                 var option = OptionFactory.Instance.GetBoolOption(id);
 
