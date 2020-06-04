@@ -89,7 +89,7 @@ namespace ACO08_Library.Communication.Protocol
                 new Option<bool>(OptionId.InvertMeasureData,
                     false),
                 new Option<bool>(OptionId.InvertErrorSignal,
-                    false),
+                    true),
                 new Option<bool>(OptionId.ShiftCurvePeak,
                     false),
                 new Option<bool>(OptionId.EnableLCD,
@@ -99,11 +99,11 @@ namespace ACO08_Library.Communication.Protocol
                 new Option<bool>(OptionId.EnableDHCP,
                     false),
                 new Option<bool>(OptionId.EnableFilter,
-                    false),
+                    true),
                 new Option<bool>(OptionId.EnableDrift,
                     false),
                 new Option<bool>(OptionId.CheckEnvelope,
-                    false)
+                    true)
             };
 
             BoolOptions = _boolOptions.Select(option => option.Id).ToArray();
