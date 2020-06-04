@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Communication\Networking\IpAddressExtensions.cs" />
     <Compile Include="Communication\Networking\NetworkInterfaceSelector.cs" />
+    <Compile Include="Public\ACO08_Options.cs" />
     <Compile Include="Public\CrimpDataReceivedEventArgs.cs" />
     <Compile Include="Data\ACO_Time.cs" />
     <Compile Include="Communication\Networking\DeviceInterfacing\DeviceCommander.cs" />

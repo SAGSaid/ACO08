@@ -15,6 +15,7 @@ namespace ACO08_TestClient.ViewModels
         public ICommand SetWorkmodeMeasureCommand { get; }
         public ICommand SetWorkmodeReferenceCommand { get; }
         public ICommand TempCommand { get; } //TODO Remove after done testing
+        public ICommand ShowOptionDialogCommand { get; }
 
         public DeviceViewModel(ACO08_Device device)
         {
@@ -33,11 +34,14 @@ namespace ACO08_TestClient.ViewModels
 
             TempCommand = new RelayCommand(_ =>
                 {
-                    var result = Device.GetOptionList();
                 },
+                _ => Device.CurrentWorkmode == Workmode.Main);
+
+            ShowOptionDialogCommand = new RelayCommand(ShowOptionDialogExecute, 
                 _ => Device.CurrentWorkmode == Workmode.Main);
             #endregion
         }
+
 
         private void SetWorkmodeMainExecute(object parameter)
         {
@@ -65,6 +69,13 @@ namespace ACO08_TestClient.ViewModels
             {
                 MessageBox.Show("Error");
             }
+        }
+
+        private void ShowOptionDialogExecute(object obj)
+        {
+            var optionWindow = new OptionWindow(Device);
+
+            optionWindow.ShowDialog();
         }
 
 

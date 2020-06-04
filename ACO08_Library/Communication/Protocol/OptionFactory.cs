@@ -14,9 +14,9 @@ namespace ACO08_Library.Communication.Protocol
         private readonly Option<float>[] _floatOptions;
         private readonly Option<int>[] _intOptions;
 
-        public OptionId[] BoolOptions { get; }
-        public OptionId[] FloatOptions { get; }
-        public OptionId[] IntOptions { get; }
+        public OptionId[] BoolOptionIds { get; }
+        public OptionId[] FloatOptionIds { get; }
+        public OptionId[] IntOptionIds { get; }
 
         /// <summary>
         /// Singleton instance
@@ -31,7 +31,7 @@ namespace ACO08_Library.Communication.Protocol
         /// <exception cref="InvalidOperationException">If the requested option isn't a boolean option.</exception>
         public Option<bool> GetBoolOption(OptionId id)
         {
-            if (BoolOptions.Contains(id))
+            if (BoolOptionIds.Contains(id))
             {
                 return _boolOptions.First(option => option.Id == id).Copy();
             }
@@ -48,7 +48,7 @@ namespace ACO08_Library.Communication.Protocol
         public Option<float> GetFloatOption(OptionId id)
         {
 
-            if (FloatOptions.Contains(id))
+            if (FloatOptionIds.Contains(id))
             {
                 return _floatOptions.First(option => option.Id == id).Copy(); 
             }
@@ -64,12 +64,27 @@ namespace ACO08_Library.Communication.Protocol
         /// <exception cref="InvalidOperationException">If the requested option isn't an integer option.</exception>
         public Option<int> GetIntOption(OptionId id)
         {
-            if (IntOptions.Contains(id))
+            if (IntOptionIds.Contains(id))
             {
                 return _intOptions.First(option => option.Id == id).Copy();
             }
 
             throw new InvalidOperationException("The requested option isn't of int type.");
+        }
+
+        public Option<bool>[] GetAllBoolOptions()
+        {
+            return _boolOptions.Select(option => option.Copy()).ToArray();
+        }
+
+        public Option<float>[] GetAllFloatOptions()
+        {
+            return _floatOptions.Select(option => option.Copy()).ToArray();
+        }
+
+        public Option<int>[] GetAllIntOptions()
+        {
+            return _intOptions.Select(option => option.Copy()).ToArray();
         }
 
         private OptionFactory()
@@ -106,7 +121,7 @@ namespace ACO08_Library.Communication.Protocol
                     true)
             };
 
-            BoolOptions = _boolOptions.Select(option => option.Id).ToArray();
+            BoolOptionIds = _boolOptions.Select(option => option.Id).ToArray();
             
             _floatOptions = new[]
             {
@@ -133,7 +148,7 @@ namespace ACO08_Library.Communication.Protocol
                     val => val >= 1 && val <= 90)
             };
 
-            FloatOptions = _floatOptions.Select(option => option.Id).ToArray();
+            FloatOptionIds = _floatOptions.Select(option => option.Id).ToArray();
 
             _intOptions = new[]
             {
@@ -177,7 +192,7 @@ namespace ACO08_Library.Communication.Protocol
                     val => val >= 1 && val <= 20)
             };
 
-            IntOptions = _intOptions.Select(option => option.Id).ToArray();
+            IntOptionIds = _intOptions.Select(option => option.Id).ToArray();
         }
     }
 }

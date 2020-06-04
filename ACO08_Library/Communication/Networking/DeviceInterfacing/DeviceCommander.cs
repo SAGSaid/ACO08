@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ACO08_Library.Communication.Protocol;
+using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 {
     /// <summary>
     /// Manages the TCP connection with the device and sends/receives commands.
     /// </summary>
-    internal class DeviceCommander : IDisposable
+    internal class DeviceCommander : IDisposable, INotifyPropertyChanged
     {
         private const int Port = 11000;
         private const int BufferLength = 8192;
@@ -31,6 +34,16 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
             _deviceEndPoint = new IPEndPoint(address, Port);
         }
 
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            private set
+            {
+                _isConnected = value;
+                OnPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// Connects the underlying TCP client.
         /// </summary>
@@ -39,7 +52,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
         {
             if (!_isConnected)
             {
-                _isConnected = true;
+                IsConnected = true;
 
                 try
                 {
@@ -66,7 +79,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
         {
             if (!_isConnected)
             {
-                _isConnected = true;
+                IsConnected = true;
 
                 try
                 {
@@ -141,6 +154,42 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
                 var responseData = ExtractDataFromFrame(responseFrame);
 
                 return new CommandResponse(responseData, command);
+            }
+
+            throw new InvalidOperationException("The commander isn't connected to a device.");
+        }
+
+        public CommandResponse SendCommandWithMultiPacketResponse(Command command)
+        {
+            if (_isConnected)
+            {
+                var initialResponse = SendCommand(command);
+
+                if (!initialResponse.IsError && !IsLastResponse(initialResponse))
+                {
+                    var nextBlockCommand = CommandFactory.Instance.GetCommand(CommandId.NextBlock);
+                    nextBlockCommand.Header.Channel = Channel.None;
+                    var additionalData = new List<byte>();
+
+                    CommandResponse response;
+
+                    do
+                    {
+                        response = SendCommand(nextBlockCommand);
+
+                        if (!response.IsError)
+                        {
+                            additionalData.AddRange(response.GetBody());
+                        }
+
+                    } while (response.GetHeader().Extension2 == 0);
+
+                    // Concatenate the initial response's data with the additional data.
+                    initialResponse = new CommandResponse(
+                        initialResponse.RawData.Concat(additionalData).ToArray(), command);
+                }
+
+                return initialResponse; 
             }
 
             throw new InvalidOperationException("The commander isn't connected to a device.");
@@ -252,6 +301,11 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
             return byteToCheck == STX || byteToCheck == ETX || byteToCheck == DLE;
         }
 
+        private static bool IsLastResponse(CommandResponse response)
+        {
+            return response.GetHeader().Extension2 == 1;
+        }
+
         private IPAddress GetLocalIp()
         {
             var selector = new NetworkInterfaceSelector();
@@ -274,9 +328,18 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
         /// </summary>
         public void Dispose()
         {
-            _isConnected = false;
+            IsConnected = false;
 
             _tcpClient.Dispose();
         }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        } 
+        #endregion
     }
 }

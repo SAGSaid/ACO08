@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using ACO08_Library.Communication.Networking.DeviceInterfacing;
 using ACO08_Library.Communication.Protocol;
@@ -18,19 +15,15 @@ namespace ACO08_Library.Public
     /// </summary>
     public sealed class ACO08_Device : IDisposable, INotifyPropertyChanged
     {
-        // For some commands the device expects an int for what is essentially a bool.
-        private static readonly byte[] PaddedTrue = {1, 0, 0, 0};
-        private static readonly byte[] PaddedFalse = {0, 0, 0, 0};
-
         private DeviceEventListener _listener;
         private DeviceCommander _commander;
 
         private bool _isListeningForEvents = false;
-        private bool _isConnected = false;
         private Workmode _currentWorkmode = Workmode.Undefined;
 
         public uint SerialNumber { get; }
         public IPAddress Address { get; }
+        public ACO08_Options Options { get; }
 
         public bool IsListeningForEvents
         {
@@ -44,12 +37,7 @@ namespace ACO08_Library.Public
 
         public bool IsConnected
         {
-            get { return _isConnected; }
-            private set
-            {
-                _isConnected = value;
-                OnPropertyChanged();
-            }
+            get { return _commander?.IsConnected ?? false; }
         }
 
         public Workmode CurrentWorkmode
@@ -69,6 +57,7 @@ namespace ACO08_Library.Public
         {
             SerialNumber = serialNumber;
             Address = address;
+            Options = new ACO08_Options();
         }
 
         /// <summary>
@@ -110,7 +99,7 @@ namespace ACO08_Library.Public
         /// <returns>Whether establishing the connection was successful</returns>
         public async Task<bool> ConnectAsync()
         {
-            if (!_isConnected)
+            if (!IsConnected)
             {
                 try
                 {
@@ -121,7 +110,9 @@ namespace ACO08_Library.Public
                         throw new Exception("Connection failed.");
                     }
 
-                    IsConnected = true;
+                    Options.Commander = _commander;
+
+                    _commander.PropertyChanged += IsConnectedChangedHandler;
 
                     StartListeningForEvents();
                     GetWorkmode();
@@ -130,7 +121,7 @@ namespace ACO08_Library.Public
                 }
                 catch (Exception)
                 {
-                    IsConnected = false;
+
                 }
             }
 
@@ -139,7 +130,7 @@ namespace ACO08_Library.Public
 
         private void CrimpDataChangedHandler(object sender, EventArgs args)
         {
-            if (_isConnected)
+            if (IsConnected)
             {
                 var command = CommandFactory.Instance.GetCommand(CommandId.GetCrimpData);
 
@@ -151,6 +142,14 @@ namespace ACO08_Library.Public
 
                     OnCrimpDataReceived(new CrimpDataReceivedEventArgs(crimpData));
                 }
+            }
+        }
+
+        private void IsConnectedChangedHandler(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == nameof(_commander.IsConnected))
+            {
+                OnPropertyChanged(nameof(IsConnected));
             }
         }
 
@@ -168,7 +167,7 @@ namespace ACO08_Library.Public
 
         public Version GetVersion()
         {
-            if (_isConnected)
+            if (IsConnected)
             {
                 var command = CommandFactory.Instance.GetCommand(CommandId.GetVersion);
 
@@ -187,7 +186,7 @@ namespace ACO08_Library.Public
 
         public Workmode GetWorkmode()
         {
-            if (_isConnected)
+            if (IsConnected)
             {
                 var command = CommandFactory.Instance.GetCommand(CommandId.GetWorkmode);
 
@@ -204,7 +203,6 @@ namespace ACO08_Library.Public
         public bool SetWorkmodeMain()
         {
             return SetWorkmode(CommandId.SetWorkmodeMain);
-
         }
 
         public bool SetWorkmodeMeasure()
@@ -219,7 +217,7 @@ namespace ACO08_Library.Public
 
         private bool SetWorkmode(CommandId id)
         {
-            if (_isConnected)
+            if (IsConnected)
             {
                 var command = CommandFactory.Instance.GetCommand(id);
 
@@ -230,133 +228,7 @@ namespace ACO08_Library.Public
 
             throw new InvalidOperationException("The device is not connected.");
         }
-
-        #region Options
-
-        public string GetOptionList()
-        {
-            if (_isConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.GetOptionList);
-
-                var response = SendCommandWithMultiPacketResponse(command);
-
-                if (response.IsError)
-                {
-                    return string.Empty;
-                }
-
-                return Encoding.Unicode.GetString(response.GetBody());
-            }
-
-            throw new InvalidOperationException("The device is not connected.");
-        }
-
-
-
-        public bool SaveSetup()
-        {
-            if (_isConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.SaveSetup);
-
-                var response = _commander.SendCommand(command);
-
-                return !response.IsError;
-            }
-
-            throw new InvalidOperationException("The device is not connected.");
-        }
-
-        public bool GetBooleanOption(OptionId id)
-        {
-            if (_isConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
-
-                command.Header.Extension1 = (byte) id;
-
-                var response = _commander.SendCommand(command);
-
-                if (!response.IsError)
-                {
-                    // Is any of the bytes in the body set?
-                    return response.GetBody().Any(b => b != 0);
-                }
-            }
-
-            throw new InvalidOperationException("The device is not connected.");
-        }
-
-        public bool SetOptionEnableInternalTrigger(bool value)
-        {
-            return SetBooleanOption(OptionId.EnableInternalTrigger, value);
-        }
-
-        private bool SetBooleanOption(OptionId id, bool value)
-        {
-            if (_isConnected)
-            {
-                var option = OptionFactory.Instance.GetBoolOption(id);
-
-                option.Value = value;
-
-                var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
-
-                command.Header.Extension1 = (byte)option.Id;
-
-                // The device expects 4 bytes for a boolean value 
-                // (Probably just an int on the device)
-                var body = value ? PaddedTrue : PaddedFalse;
-
-                command.Body.AddRange(body);
-
-                var response = _commander.SendCommand(command);
-
-                return !response.IsError;
-            }
-
-            throw new InvalidOperationException("The device is not connected.");
-        }
-
-        #endregion
-
-        private CommandResponse SendCommandWithMultiPacketResponse(Command command)
-        {
-            if (_isConnected)
-            {
-                var initialResponse = _commander.SendCommand(command);
-
-                if (!initialResponse.IsError && initialResponse.GetHeader().Extension2 == 0)
-                {
-                    var nextBlockCommand = CommandFactory.Instance.GetCommand(CommandId.NextBlock);
-                    nextBlockCommand.Header.Channel = Channel.None;
-                    var additionalData = new List<byte>();
-
-                    CommandResponse response;
-
-                    do
-                    {
-                        response = _commander.SendCommand(nextBlockCommand);
-
-                        if (!response.IsError)
-                        {
-                            additionalData.AddRange(response.GetBody());
-                        }
-
-                    } while (response.GetHeader().Extension2 == 0);
-
-                    // Concatenate the initial response's data with the additional data.
-                    initialResponse = new CommandResponse(
-                        initialResponse.RawData.Concat(additionalData).ToArray(), command);
-                }
-
-                return initialResponse; 
-            }
-
-            throw new InvalidOperationException("The device is not connected.");
-        }
-
+        
         #endregion
 
 
