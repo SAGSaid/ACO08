@@ -5,8 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ACO08_TestClient"
         mc:Ignorable="d"
-        Title="OptionWindow" Height="450" Width="800">
+        Title="ACO08 Options" Height="450" Width="800">
+
+    <!--TEMPLATES-->
+    <Window.Resources>
+        <DataTemplate x:Key="BoolOptionTemplate">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Path=Id}"/>
+                <CheckBox Grid.Column="1" IsChecked="{Binding Path=Value}"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FloatOptionTemplate">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Path=Id}"/>
+                <TextBox Grid.Column="1" Text="{Binding Path=Value, StringFormat={}{0:F}}"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="IntOptionTemplate">
+            <Grid Margin="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Path=Id}"/>
+                <TextBox Grid.Column="1" Text="{Binding Path=Value}"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+
+    <!--CONTENT-->
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <ItemsControl ItemsSource="{Binding Path=Options.BoolOptions}" 
+                      ItemTemplate="{StaticResource BoolOptionTemplate}"/>
+
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding Path=Options.FloatOptions}"
+                      ItemTemplate="{StaticResource FloatOptionTemplate}"/>
+
+        <ItemsControl Grid.Column="2" ItemsSource="{Binding Path=Options.IntOptions}"
+                      ItemTemplate="{StaticResource IntOptionTemplate}"/>
+
     </Grid>
 </Window>
