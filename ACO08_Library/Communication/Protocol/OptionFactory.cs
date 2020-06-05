@@ -25,12 +25,12 @@ namespace ACO08_Library.Communication.Protocol
         public static OptionFactory Instance { get; } = new OptionFactory();
 
         /// <summary>
-        /// Gets one of the boolean options
+        /// Copies the specified boolean option
         /// </summary>
-        /// <param name="id">Which option to get</param>
+        /// <param name="id">Which option to copy</param>
         /// <returns>A copy of the requested option</returns>
         /// <exception cref="InvalidOperationException">If the requested option isn't a boolean option.</exception>
-        public Option<bool> GetBoolOption(OptionId id)
+        public Option<bool> CopyBoolOption(OptionId id)
         {
             if (BoolOptionIds.Contains(id))
             {
@@ -41,12 +41,12 @@ namespace ACO08_Library.Communication.Protocol
         }
 
         /// <summary>
-        /// Gets one of the float options
+        /// Copies the specified float option
         /// </summary>
-        /// <param name="id">Which option to get</param>
+        /// <param name="id">Which option to copy</param>
         /// <returns>A copy of the requested option</returns>
         /// <exception cref="InvalidOperationException">If the requested option isn't a float option.</exception>
-        public Option<float> GetFloatOption(OptionId id)
+        public Option<float> CopyFloatOption(OptionId id)
         {
 
             if (FloatOptionIds.Contains(id))
@@ -58,12 +58,12 @@ namespace ACO08_Library.Communication.Protocol
         }
 
         /// <summary>
-        /// Gets one of the integer options
+        /// Copies the specified integer option
         /// </summary>
-        /// <param name="id">Which option to get</param>
+        /// <param name="id">Which option to copy</param>
         /// <returns>A copy of the requested option</returns>
         /// <exception cref="InvalidOperationException">If the requested option isn't an integer option.</exception>
-        public Option<int> GetIntOption(OptionId id)
+        public Option<int> CopyIntOption(OptionId id)
         {
             if (IntOptionIds.Contains(id))
             {

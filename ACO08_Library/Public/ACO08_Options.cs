@@ -101,9 +101,7 @@ namespace ACO08_Library.Public
         {
             if (IsConnected)
             {
-                var option = OptionFactory.Instance.GetBoolOption(id);
-
-                option.Value = value;
+                var option = OptionFactory.Instance.CopyBoolOption(id);
 
                 var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
 
