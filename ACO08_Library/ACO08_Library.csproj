@@ -67,6 +67,7 @@
     <Compile Include="Enums\Workmode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Public\ACO08_Device.cs" />
+    <Compile Include="Tools\LINQ_Extensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

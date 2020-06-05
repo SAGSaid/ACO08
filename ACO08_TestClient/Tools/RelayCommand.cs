@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace ACO08_TestClient
+namespace ACO08_TestClient.Tools
 {
     /// <summary>
     /// Implements ICommand and allows binding of external methods.

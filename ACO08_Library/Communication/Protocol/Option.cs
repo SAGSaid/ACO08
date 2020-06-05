@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Protocol
@@ -7,7 +9,7 @@ namespace ACO08_Library.Communication.Protocol
     /// Encapsulates an option of the device in a generic way.
     /// </summary>
     /// <typeparam name="T">The underlying data type of the option</typeparam>
-    public class Option<T>
+    public class Option<T> : INotifyPropertyChanged
     {
         private T _value;
         private readonly Predicate<T> _validateValue;
@@ -22,6 +24,7 @@ namespace ACO08_Library.Communication.Protocol
                 if (_validateValue(value))
                 {
                     _value = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -30,8 +33,8 @@ namespace ACO08_Library.Communication.Protocol
         {
             _validateValue = validateValue ?? (_ => true);
 
-            // Usually throwing in constructor is finicky, but this helps during testing.
-            // It isn't a concern for runtime issues.
+            // Usually throwing in constructor is finicky, but this helps during debugging.
+            // It doesn't create runtime issues.
             if (!_validateValue(defaultValue))
             {
                 throw new ArgumentException(
@@ -51,7 +54,15 @@ namespace ACO08_Library.Communication.Protocol
         {
             return new Option<T>(Id, DefaultValue, _validateValue);
         }
-        
 
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        } 
+        #endregion
     }
 }

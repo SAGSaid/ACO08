@@ -29,7 +29,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding Path=Id}"/>
-                <TextBox Grid.Column="1" Text="{Binding Path=Value, StringFormat={}{0:F}}"/>
+                <TextBox Grid.Column="1" Text="{Binding Path=Value, StringFormat={}{0:F2}}"/>
             </Grid>
         </DataTemplate>
 

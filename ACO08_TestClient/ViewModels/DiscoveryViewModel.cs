@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using ACO08_Library.Communication.Networking.DeviceInterfacing;
 using ACO08_Library.Public;
+using ACO08_TestClient.Tools;
 using ACO08_TestClient.Views;
 using AsyncAwaitBestPractices.MVVM;
 
@@ -128,9 +129,9 @@ namespace ACO08_TestClient.ViewModels
 
         private void DeviceLocatedHandler(object sender, DeviceLocatedEventArgs args)
         {
-            if (Devices.All(dev => dev.SerialNumber != args.Device.SerialNumber))
+            if (Devices.All(dev => dev.SerialNumber != args.SerialNumber))
             {
-                _dispatcher.Invoke(() => Devices.Add(args.Device));
+                _dispatcher.Invoke(() => Devices.Add(new ACO08_Device(args.SerialNumber, args.Address)));
             }
         }
 

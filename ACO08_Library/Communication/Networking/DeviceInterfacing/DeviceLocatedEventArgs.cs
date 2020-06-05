@@ -9,11 +9,13 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
     /// </summary>
     public class DeviceLocatedEventArgs : EventArgs
     {
-        public ACO08_Device Device { get; }
+        public uint SerialNumber { get; }
+        public IPAddress Address { get; }
 
         internal DeviceLocatedEventArgs(uint serialNumber, IPAddress address)
         {
-            Device = new ACO08_Device(serialNumber, address);
+            SerialNumber = serialNumber;
+            Address = address;
         }
     }
 }

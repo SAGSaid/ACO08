@@ -1,12 +1,14 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ACO08_Library.Communication.Networking.DeviceInterfacing;
 using ACO08_Library.Communication.Protocol;
 using ACO08_Library.Enums;
+using ACO08_Library.Tools;
 
 namespace ACO08_Library.Public
 {
@@ -29,6 +31,10 @@ namespace ACO08_Library.Public
             BoolOptions = factory.GetAllBoolOptions();
             FloatOptions = factory.GetAllFloatOptions();
             IntOptions = factory.GetAllIntOptions();
+
+            BoolOptions.ForEach(option => option.PropertyChanged += OptionValueChangedHandler);
+            FloatOptions.ForEach(option => option.PropertyChanged += OptionValueChangedHandler);
+            IntOptions.ForEach(option => option.PropertyChanged += OptionValueChangedHandler);
         }
 
         public bool IsConnected
@@ -91,11 +97,6 @@ namespace ACO08_Library.Public
             throw new InvalidOperationException("The device is not connected.");
         }
 
-        public bool SetOptionEnableInternalTrigger(bool value)
-        {
-            return SetBooleanOption(OptionId.EnableInternalTrigger, value);
-        }
-
         private bool SetBooleanOption(OptionId id, bool value)
         {
             if (IsConnected)
@@ -121,5 +122,41 @@ namespace ACO08_Library.Public
 
             throw new InvalidOperationException("The device is not connected.");
         }
+
+        private bool SetFloatOption(OptionId id, float value)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool SetIntOption(OptionId id, int value)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OptionValueChangedHandler(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == "Value")
+            {
+                switch (sender)
+                {
+                    case Option<bool> option:
+                        SetBooleanOption(option.Id, option.Value);
+                        break;
+
+                    case Option<float> option:
+                        SetFloatOption(option.Id, option.Value);
+                        break;
+
+                    case Option<int> option:
+                        SetIntOption(option.Id, option.Value);
+                        break;
+
+                    default:
+                        throw new InvalidOperationException("Unexpected sender type.");
+                }
+            }
+        }
+        
+
     }
 }
