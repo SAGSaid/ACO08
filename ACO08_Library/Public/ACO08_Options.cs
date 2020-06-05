@@ -15,7 +15,18 @@ namespace ACO08_Library.Public
         private static readonly byte[] PaddedTrue = { 1, 0, 0, 0 };
         private static readonly byte[] PaddedFalse = { 0, 0, 0, 0 };
 
-        internal DeviceCommander Commander { get; set; }
+        private DeviceCommander _commander;
+        private bool _isUpdating = false;
+
+        internal DeviceCommander Commander
+        {
+            get { return _commander; }
+            set
+            {
+                _commander = value;
+                UpdateOptions();
+            }
+        }
 
         public Option<bool>[] BoolOptions { get; }
         public Option<float>[] FloatOptions { get; }
@@ -41,7 +52,13 @@ namespace ACO08_Library.Public
 
         public void UpdateOptions()
         {
-            // TODO
+            _isUpdating = true;
+
+            BoolOptions.ForEach(option => option.Value = GetBooleanOption(option.Id));
+            FloatOptions.ForEach(option => option.Value = GetFloatOption(option.Id));
+            IntOptions.ForEach(option => option.Value = GetIntOption(option.Id));
+
+            _isUpdating = false;
         }
 
         public string GetOptionList()
@@ -82,6 +99,36 @@ namespace ACO08_Library.Public
 
             // Is any of the bits in the body set?
             return response.GetBody().Any(b => b != 0);
+        }
+
+        public float GetFloatOption(OptionId id)
+        {
+            CheckIsConnected();
+
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
+
+            command.Header.Extension1 = (byte)id;
+
+            var response = Commander.SendCommand(command);
+
+            ThrowOnResponseError(response);
+
+            return BitConverter.ToSingle(response.GetBody(), 0);
+        }
+
+        public int GetIntOption(OptionId id)
+        {
+            CheckIsConnected();
+
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
+
+            command.Header.Extension1 = (byte)id;
+
+            var response = Commander.SendCommand(command);
+
+            ThrowOnResponseError(response);
+
+            return BitConverter.ToInt32(response.GetBody(), 0);
         }
 
         private void SetBooleanOption(OptionId id, bool value)
@@ -161,7 +208,7 @@ namespace ACO08_Library.Public
 
         private void OptionValueChangedHandler(object sender, PropertyChangedEventArgs args)
         {
-            if (args.PropertyName == "Value")
+            if (args.PropertyName == "Value" && !_isUpdating)
             {
                 switch (sender)
                 {
