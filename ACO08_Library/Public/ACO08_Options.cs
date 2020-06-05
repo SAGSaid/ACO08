@@ -109,9 +109,9 @@ namespace ACO08_Library.Public
 
                 // The device expects 4 bytes for a boolean value 
                 // (Probably just an int on the device)
-                var body = value ? PaddedTrue : PaddedFalse;
+                var data = value ? PaddedTrue : PaddedFalse;
 
-                command.Body.AddRange(body);
+                command.Body.AddRange(data);
 
                 var response = Commander.SendCommand(command);
 
@@ -123,12 +123,47 @@ namespace ACO08_Library.Public
 
         private bool SetFloatOption(OptionId id, float value)
         {
-            throw new NotImplementedException();
+            if (IsConnected)
+            {
+                var option = OptionFactory.Instance.CopyFloatOption(id);
+
+                var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
+
+                command.Header.Extension1 = (byte)option.Id;
+
+                var data = BitConverter.GetBytes(value);
+
+                command.Body.AddRange(data);
+
+                var response = Commander.SendCommand(command);
+
+                return !response.IsError;
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
         }
 
         private bool SetIntOption(OptionId id, int value)
         {
-            throw new NotImplementedException();
+            if (IsConnected)
+            {
+                var option = OptionFactory.Instance.CopyIntOption(id);
+
+                var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
+
+                command.Header.Extension1 = (byte)option.Id;
+
+                var data = BitConverter.GetBytes(value);
+
+                command.Body.AddRange(data);
+
+                var response = Commander.SendCommand(command);
+
+                return !response.IsError;
+            }
+
+            throw new InvalidOperationException("The device is not connected.");
+
         }
 
         private void OptionValueChangedHandler(object sender, PropertyChangedEventArgs args)
