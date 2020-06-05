@@ -25,9 +25,9 @@ namespace ACO08_Library.Public
         {
             var factory = OptionFactory.Instance;
 
-            BoolOptions = factory.GetAllBoolOptions();
-            FloatOptions = factory.GetAllFloatOptions();
-            IntOptions = factory.GetAllIntOptions();
+            BoolOptions = factory.CopyAllBoolOptions();
+            FloatOptions = factory.CopyAllFloatOptions();
+            IntOptions = factory.CopyAllIntOptions();
 
             BoolOptions.ForEach(option => option.PropertyChanged += OptionValueChangedHandler);
             FloatOptions.ForEach(option => option.PropertyChanged += OptionValueChangedHandler);
@@ -37,6 +37,11 @@ namespace ACO08_Library.Public
         public bool IsConnected
         {
             get { return Commander?.IsConnected ?? false; }
+        }
+
+        public void UpdateOptions()
+        {
+            // TODO
         }
 
         public string GetOptionList()

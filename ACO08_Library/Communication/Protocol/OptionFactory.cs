@@ -73,17 +73,17 @@ namespace ACO08_Library.Communication.Protocol
             throw new InvalidOperationException("The requested option isn't of int type.");
         }
 
-        public Option<bool>[] GetAllBoolOptions()
+        public Option<bool>[] CopyAllBoolOptions()
         {
             return _boolOptions.Select(option => option.Copy()).ToArray();
         }
 
-        public Option<float>[] GetAllFloatOptions()
+        public Option<float>[] CopyAllFloatOptions()
         {
             return _floatOptions.Select(option => option.Copy()).ToArray();
         }
 
-        public Option<int>[] GetAllIntOptions()
+        public Option<int>[] CopyAllIntOptions()
         {
             return _intOptions.Select(option => option.Copy()).ToArray();
         }
