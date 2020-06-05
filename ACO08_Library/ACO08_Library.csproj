@@ -43,6 +43,10 @@
   <ItemGroup>
     <Compile Include="Communication\Networking\IpAddressExtensions.cs" />
     <Compile Include="Communication\Networking\NetworkInterfaceSelector.cs" />
+    <Compile Include="Data\Validation\NonValidatingValidator.cs" />
+    <Compile Include="Data\Validation\DistinctIntegersValidator.cs" />
+    <Compile Include="Data\Validation\IValidateData.cs" />
+    <Compile Include="Data\Validation\RangeValidator.cs" />
     <Compile Include="Public\ACO08_Options.cs" />
     <Compile Include="Public\CrimpDataReceivedEventArgs.cs" />
     <Compile Include="Data\ACO_Time.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ACO08_Library.Data.Validation;
 using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Protocol
@@ -93,30 +94,43 @@ namespace ACO08_Library.Communication.Protocol
             {
                 new Option<bool>(OptionId.InvertReadySignal,
                     false),
+
                 new Option<bool>(OptionId.CheckArea,
                     false),
+
                 new Option<bool>(OptionId.CheckTrouble,
                     false),
+
                 new Option<bool>(OptionId.EnableInternalTrigger,
                     false),
+
                 new Option<bool>(OptionId.AlwaysAcknowledgeError,
                     false),
+
                 new Option<bool>(OptionId.InvertMeasureData,
                     false),
+
                 new Option<bool>(OptionId.InvertErrorSignal,
                     true),
+
                 new Option<bool>(OptionId.ShiftCurvePeak,
                     false),
+
                 new Option<bool>(OptionId.EnableLCD,
                     false),
+
                 new Option<bool>(OptionId.EnableAutoReference,
                     false),
+
                 new Option<bool>(OptionId.EnableDHCP,
                     false),
+
                 new Option<bool>(OptionId.EnableFilter,
                     true),
+
                 new Option<bool>(OptionId.EnableDrift,
                     false),
+
                 new Option<bool>(OptionId.CheckEnvelope,
                     true)
             };
@@ -126,26 +140,32 @@ namespace ACO08_Library.Communication.Protocol
             _floatOptions = new[]
             {
                 new Option<float>(OptionId.CalibrationFactor,
-                    1.0f,
-                    val => val >= 0.01 && val <= 100),
+                    1, 
+                    new RangeValidator<float>(0.01f, 100)),
+
                 new Option<float>(OptionId.LowerEnvelope,
-                    5.0f,
-                    val => val >= 1 && val <= 50),
+                    5,
+                    new RangeValidator<float>(1, 50)),
+
                 new Option<float>(OptionId.UpperEnvelope,
-                    5.0f,
-                    val => val >= 1 && val <= 50),
+                    5,
+                    new RangeValidator<float>(1, 50)),
+
                 new Option<float>(OptionId.LowerTrouble,
-                    30.0f,
-                    val => val >= 1 && val <= 90),
+                    30, 
+                    new RangeValidator<float>(1, 90)),
+
                 new Option<float>(OptionId.UpperTrouble,
-                    30.0f,
-                    val => val >= 1 && val <= 90),
+                    30,
+                    new RangeValidator<float>(1, 90)),
+
                 new Option<float>(OptionId.LowerArea,
-                    90.0f,
-                    val => val >= 1 && val <= 90),
+                    90,
+                    new RangeValidator<float>(1, 90)),
+
                 new Option<float>(OptionId.UpperArea,
-                    90.0f,
-                    val => val >= 1 && val <= 90)
+                    90,
+                    new RangeValidator<float>(1, 90))
             };
 
             FloatOptionIds = _floatOptions.Select(option => option.Id).ToArray();
@@ -154,42 +174,54 @@ namespace ACO08_Library.Communication.Protocol
             {
                 new Option<int>(OptionId.ReferenceCrimpAmount,
                     5,
-                    val => val >= 1 && val <= 100),
+                    new RangeValidator<int>(1, 100)),
+
                 new Option<int>(OptionId.ObservationStartForce,
                     70,
-                    val => val >= 10 && val <= 99),
+                    new RangeValidator<int>(10, 99)),
+
                 new Option<int>(OptionId.ObservationEndForce,
                     90,
-                    val => val >= 10 && val <= 99),
+                    new RangeValidator<int>(10, 99)),
+
                 new Option<int>(OptionId.Gain,
                     0,
-                    val => val >= 0 && val <= 5),
+                    new RangeValidator<int>(0, 5)),
+
                 new Option<int>(OptionId.SampleRate,
                     1,
-                    val => val >= 1 && val <= 4),
+                    new RangeValidator<int>(1, 4)),
+
                 new Option<int>(OptionId.TriggerOffset,
                     0,
-                    val => val >= -255 && val <= 255),
+                    new RangeValidator<int>(-255, 255)),
+
                 new Option<int>(OptionId.TriggerLevel,
                     10,
-                    val => val >= 1 && val <= 99),
+                    new RangeValidator<int>(1, 99)),
+
                 new Option<int>(OptionId.DebugMessageTypes,
                     5,
-                    val => val >= 0 && val <= 15),
+                    new RangeValidator<int>(0, 15)),
+
                 new Option<int>(OptionId.ActiveChannel,
                     1,
-                    val => val >= 1 && val <= 3),
+                    new DistinctIntegersValidator(1, 2, 3)),
+
                 new Option<int>(OptionId.DefaultIP,
                     -1062731320), // This corresponds to IP Adress: 192.168.1.200
+
                 new Option<int>(OptionId.SampleCount,
                     512,
-                    val => val == 256 || val == 512 || val == 1024),
+                    new DistinctIntegersValidator(256, 512, 1024)),
+
                 new Option<int>(OptionId.CommunicationFrameLength,
                     100,
-                    val => val >= 100 && val <= 500),
+                    new RangeValidator<int>(100, 500)),
+
                 new Option<int>(OptionId.MaxDrift,
                     10,
-                    val => val >= 1 && val <= 20)
+                    new RangeValidator<int>(1, 20))
             };
 
             IntOptionIds = _intOptions.Select(option => option.Id).ToArray();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ACO08_Library.Data.Validation;
 using ACO08_Library.Enums;
 
 namespace ACO08_Library.Communication.Protocol
@@ -12,7 +13,7 @@ namespace ACO08_Library.Communication.Protocol
     public class Option<T> : INotifyPropertyChanged
     {
         private T _value;
-        private readonly Predicate<T> _validateValue;
+        private readonly IValidateData<T> _validator;
 
         public OptionId Id { get; }
         public T DefaultValue { get; }
@@ -21,7 +22,7 @@ namespace ACO08_Library.Communication.Protocol
             get { return _value; }
             set
             {
-                if (_validateValue(value))
+                if (_validator.Validate(value))
                 {
                     _value = value;
                     OnPropertyChanged();
@@ -29,17 +30,13 @@ namespace ACO08_Library.Communication.Protocol
             }
         }
 
-        internal Option(OptionId id, T defaultValue, Predicate<T> validateValue = null)
+        internal Option(OptionId id, T defaultValue, IValidateData<T> validateValue = null)
         {
-            _validateValue = validateValue ?? (_ => true);
+            _validator = validateValue ?? new NonValidatingValidator<T>();
 
             // Usually throwing in constructor is finicky, but this helps during debugging.
             // It doesn't create runtime issues.
-            if (!_validateValue(defaultValue))
-            {
-                throw new ArgumentException(
-                    "The defaultValue given is invalid according to the given validateValue predicate.");
-            }
+            _validator.Validate(defaultValue);
 
             Id = id;
             DefaultValue = defaultValue;
@@ -52,7 +49,7 @@ namespace ACO08_Library.Communication.Protocol
         /// <returns>A copy of the instance</returns>
         public Option<T> Copy()
         {
-            return new Option<T>(Id, DefaultValue, _validateValue);
+            return new Option<T>(Id, DefaultValue, _validator);
         }
 
 
