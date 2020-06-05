@@ -17,7 +17,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
     internal class DeviceCommander : IDisposable, INotifyPropertyChanged
     {
         private const int Port = 11000;
-        private const int BufferLength = 8192;
+        private const int ReceiveBufferLength = 8192;
 
         // Protocol specific control signs
         private const byte STX = 0x02; // Start Text 
@@ -115,12 +115,12 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
                 // This means that we check the network every 50 milliseconds for possible reads
                 stream.ReadTimeout = 50;
 
-                var responseFrame = new byte[BufferLength];
+                var responseFrame = new byte[ReceiveBufferLength];
                 int bytesReadFromStream;
                 
                 do
                 {
-                    bytesReadFromStream = stream.Read(responseFrame, 0, BufferLength);
+                    bytesReadFromStream = stream.Read(responseFrame, 0, ReceiveBufferLength);
                 } while (bytesReadFromStream == 0);
 
                 var responseData = ExtractDataFromFrame(responseFrame);
@@ -136,7 +136,6 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
         /// </summary>
         /// <param name="command">The command to be sent</param>
         /// <returns>The device's response to the command</returns>
-
         public async Task<CommandResponse> SendCommandAsync(Command command)
         {
             if (_isConnected)
@@ -147,9 +146,9 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 
                 await stream.WriteAsync(frame, 0, frame.Length);
 
-                var responseFrame = new byte[BufferLength];
+                var responseFrame = new byte[ReceiveBufferLength];
 
-                await stream.ReadAsync(responseFrame, 0, BufferLength);
+                await stream.ReadAsync(responseFrame, 0, ReceiveBufferLength);
 
                 var responseData = ExtractDataFromFrame(responseFrame);
 

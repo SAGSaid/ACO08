@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ACO08_Library.Public;
+﻿using ACO08_Library.Public;
 
 namespace ACO08_TestClient.ViewModels
 {
