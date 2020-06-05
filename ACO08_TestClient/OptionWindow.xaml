@@ -29,7 +29,8 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding Path=Id}"/>
-                <TextBox Grid.Column="1" Text="{Binding Path=Value, StringFormat={}{0:F2}}"/>
+                <TextBox Grid.Column="1" 
+                         Text="{Binding Path=Value, StringFormat={}{0:F2}, ValidatesOnExceptions=True}"/>
             </Grid>
         </DataTemplate>
 
@@ -41,7 +42,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding Path=Id}"/>
-                <TextBox Grid.Column="1" Text="{Binding Path=Value}"/>
+                <TextBox Grid.Column="1" Text="{Binding Path=Value, ValidatesOnExceptions=True}"/>
             </Grid>
         </DataTemplate>
     </Window.Resources>
