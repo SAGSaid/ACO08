@@ -1,10 +1,6 @@
 ﻿<Window x:Class="ACO08_TestClient.OptionWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ACO08_TestClient"
-        mc:Ignorable="d"
         Title="ACO08 Options" Height="450" Width="800">
 
     <!--TEMPLATES-->
@@ -30,7 +26,8 @@
 
                 <TextBlock Text="{Binding Path=Id}"/>
                 <TextBox Grid.Column="1" 
-                         Text="{Binding Path=Value, StringFormat={}{0:F2}, ValidatesOnExceptions=True}"/>
+                         Text="{Binding Path=Value, StringFormat={}{0:F2}, 
+                    ValidatesOnExceptions=True}"/>
             </Grid>
         </DataTemplate>
 
@@ -42,7 +39,8 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding Path=Id}"/>
-                <TextBox Grid.Column="1" Text="{Binding Path=Value, ValidatesOnExceptions=True}"/>
+                <TextBox Grid.Column="1" Text="{Binding Path=Value, 
+                    ValidatesOnExceptions=True}"/>
             </Grid>
         </DataTemplate>
     </Window.Resources>

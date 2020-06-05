@@ -290,7 +290,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 
             if (checkSum != 0)
             {
-                throw new ApplicationException("The checksum was wrong. Try again.");
+                throw new ACO08_Exception(ErrorId.Checksum);
             }
 
             return data.ToArray();

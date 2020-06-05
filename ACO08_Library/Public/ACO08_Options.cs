@@ -1,10 +1,7 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using ACO08_Library.Communication.Networking.DeviceInterfacing;
 using ACO08_Library.Communication.Protocol;
 using ACO08_Library.Enums;
@@ -44,126 +41,117 @@ namespace ACO08_Library.Public
 
         public string GetOptionList()
         {
-            if (IsConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.GetOptionList);
+            CheckIsConnected();
 
-                var response = Commander.SendCommandWithMultiPacketResponse(command);
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetOptionList);
 
-                if (response.IsError)
-                {
-                    return string.Empty;
-                }
+            var response = Commander.SendCommandWithMultiPacketResponse(command);
 
-                return Encoding.Unicode.GetString(response.GetBody());
-            }
+            ThrowOnResponseError(response);
 
-            throw new InvalidOperationException("The device is not connected.");
+            return Encoding.Unicode.GetString(response.GetBody());
         }
 
-
-
-        public bool SaveSetup()
+        public void SaveSetup()
         {
-            if (IsConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.SaveSetup);
+            CheckIsConnected();
 
-                var response = Commander.SendCommand(command);
+            var command = CommandFactory.Instance.GetCommand(CommandId.SaveSetup);
 
-                return !response.IsError;
-            }
+            var response = Commander.SendCommand(command);
 
-            throw new InvalidOperationException("The device is not connected.");
+            ThrowOnResponseError(response);
         }
 
         public bool GetBooleanOption(OptionId id)
         {
-            if (IsConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
+            CheckIsConnected();
 
-                command.Header.Extension1 = (byte)id;
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
 
-                var response = Commander.SendCommand(command);
+            command.Header.Extension1 = (byte)id;
 
-                if (!response.IsError)
-                {
-                    // Is any of the bytes in the body set?
-                    return response.GetBody().Any(b => b != 0);
-                }
-            }
+            var response = Commander.SendCommand(command);
 
-            throw new InvalidOperationException("The device is not connected.");
+            ThrowOnResponseError(response);
+
+            // Is any of the bits in the body set?
+            return response.GetBody().Any(b => b != 0);
         }
 
-        private bool SetBooleanOption(OptionId id, bool value)
+        private void SetBooleanOption(OptionId id, bool value)
         {
-            if (IsConnected)
-            {
-                var option = OptionFactory.Instance.CopyBoolOption(id);
+            CheckIsConnected();
 
-                var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
+            var option = OptionFactory.Instance.CopyBoolOption(id);
 
-                command.Header.Extension1 = (byte)option.Id;
+            var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
 
-                // The device expects 4 bytes for a boolean value 
-                // (Probably just an int on the device)
-                var data = value ? PaddedTrue : PaddedFalse;
+            command.Header.Extension1 = (byte)option.Id;
 
-                command.Body.AddRange(data);
+            // The device expects 4 bytes for a boolean value 
+            // (Probably just an int on the device)
+            var data = value ? PaddedTrue : PaddedFalse;
 
-                var response = Commander.SendCommand(command);
+            command.Body.AddRange(data);
 
-                return !response.IsError;
-            }
+            var response = Commander.SendCommand(command);
 
-            throw new InvalidOperationException("The device is not connected.");
+            ThrowOnResponseError(response);
         }
 
-        private bool SetFloatOption(OptionId id, float value)
+        private void SetFloatOption(OptionId id, float value)
         {
-            if (IsConnected)
-            {
-                var option = OptionFactory.Instance.CopyFloatOption(id);
+            CheckIsConnected();
 
-                var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
+            var option = OptionFactory.Instance.CopyFloatOption(id);
 
-                command.Header.Extension1 = (byte)option.Id;
+            var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
 
-                var data = BitConverter.GetBytes(value);
+            command.Header.Extension1 = (byte)option.Id;
 
-                command.Body.AddRange(data);
+            var data = BitConverter.GetBytes(value);
 
-                var response = Commander.SendCommand(command);
+            command.Body.AddRange(data);
 
-                return !response.IsError;
-            }
+            var response = Commander.SendCommand(command);
 
-            throw new InvalidOperationException("The device is not connected.");
+            ThrowOnResponseError(response);
         }
 
-        private bool SetIntOption(OptionId id, int value)
+        private void SetIntOption(OptionId id, int value)
         {
-            if (IsConnected)
+            CheckIsConnected();
+
+            var option = OptionFactory.Instance.CopyIntOption(id);
+
+            var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
+
+            command.Header.Extension1 = (byte)option.Id;
+
+            var data = BitConverter.GetBytes(value);
+
+            command.Body.AddRange(data);
+
+            var response = Commander.SendCommand(command);
+
+            ThrowOnResponseError(response);
+        }
+
+        private void CheckIsConnected()
+        {
+            if (!IsConnected)
             {
-                var option = OptionFactory.Instance.CopyIntOption(id);
-
-                var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
-
-                command.Header.Extension1 = (byte)option.Id;
-
-                var data = BitConverter.GetBytes(value);
-
-                command.Body.AddRange(data);
-
-                var response = Commander.SendCommand(command);
-
-                return !response.IsError;
+                throw new InvalidOperationException("The device is not connected.");
             }
+        }
 
-            throw new InvalidOperationException("The device is not connected.");
-
+        private static void ThrowOnResponseError(CommandResponse response)
+        {
+            if (response.IsError)
+            {
+                throw new ACO08_Exception((ErrorId)response.GetBody().Last());
+            }
         }
 
         private void OptionValueChangedHandler(object sender, PropertyChangedEventArgs args)
@@ -185,11 +173,10 @@ namespace ACO08_Library.Public
                         break;
 
                     default:
-                        throw new InvalidOperationException("Unexpected sender type.");
+                        throw new NotSupportedException("Unexpected sender type.");
                 }
             }
         }
-        
 
     }
 }

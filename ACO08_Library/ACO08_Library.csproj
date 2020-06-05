@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Communication\Networking\IpAddressExtensions.cs" />
     <Compile Include="Communication\Networking\NetworkInterfaceSelector.cs" />
+    <Compile Include="Communication\Protocol\ACO08_Exception.cs" />
     <Compile Include="Data\Validation\NonValidatingValidator.cs" />
     <Compile Include="Data\Validation\DistinctIntegersValidator.cs" />
     <Compile Include="Data\Validation\IValidateData.cs" />
