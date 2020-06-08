@@ -74,6 +74,7 @@ namespace ACO08_TestClient.ViewModels
 
         private void ShowOptionDialogExecute(object obj)
         {
+            Device.Options.UpdateOptions();
             var optionWindow = new OptionWindow(Device.Options);
 
             optionWindow.ShowDialog();

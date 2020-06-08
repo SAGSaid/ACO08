@@ -24,7 +24,6 @@ namespace ACO08_Library.Public
             set
             {
                 _commander = value;
-                UpdateOptions();
             }
         }
 
