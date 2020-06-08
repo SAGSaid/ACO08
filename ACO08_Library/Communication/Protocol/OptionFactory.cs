@@ -108,10 +108,10 @@ namespace ACO08_Library.Communication.Protocol
                     false),
 
                 new Option<bool>(OptionId.InvertMeasureData,
-                    false),
+                    true),
 
                 new Option<bool>(OptionId.InvertErrorSignal,
-                    true),
+                    false),
 
                 new Option<bool>(OptionId.ShiftCurvePeak,
                     false),
