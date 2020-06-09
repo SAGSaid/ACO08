@@ -104,31 +104,31 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
         /// <returns>The device's response to the command.</returns>
         public CommandResponse SendCommand(Command command)
         {
-            if (_isConnected)
+            if (!_isConnected)
             {
-                var frame = PutDataIntoFrame(command.GetRawCommand());
-
-                var stream = _tcpClient.GetStream();
-
-                stream.Write(frame, 0, frame.Length);
-
-                // This means that we check the network every 50 milliseconds for possible reads
-                stream.ReadTimeout = 50;
-
-                var responseFrame = new byte[ReceiveBufferLength];
-                int bytesReadFromStream;
-                
-                do
-                {
-                    bytesReadFromStream = stream.Read(responseFrame, 0, ReceiveBufferLength);
-                } while (bytesReadFromStream == 0);
-
-                var responseData = ExtractDataFromFrame(responseFrame);
-
-                return new CommandResponse(responseData, command);
+                throw new InvalidOperationException("Error: Not connected to a device.");
             }
 
-            throw new InvalidOperationException("The commander isn't connected to a device.");
+            var frame = PutDataIntoFrame(command.GetRawCommand());
+
+            var stream = _tcpClient.GetStream();
+
+            stream.Write(frame, 0, frame.Length);
+
+            // The stream blocks for that amount of milliseconds to read.
+            stream.ReadTimeout = 50;
+
+            var responseFrame = new byte[ReceiveBufferLength];
+            int bytesReadFromStream;
+
+            do
+            {
+                bytesReadFromStream = stream.Read(responseFrame, 0, ReceiveBufferLength);
+            } while (bytesReadFromStream == 0);
+
+            var responseData = ExtractDataFromFrame(responseFrame);
+
+            return new CommandResponse(responseData, command);
         }
 
         /// <summary>
@@ -138,60 +138,60 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
         /// <returns>The device's response to the command</returns>
         public async Task<CommandResponse> SendCommandAsync(Command command)
         {
-            if (_isConnected)
+            if (!_isConnected)
             {
-                var frame = PutDataIntoFrame(command.GetRawCommand());
-
-                var stream = _tcpClient.GetStream();
-
-                await stream.WriteAsync(frame, 0, frame.Length);
-
-                var responseFrame = new byte[ReceiveBufferLength];
-
-                await stream.ReadAsync(responseFrame, 0, ReceiveBufferLength);
-
-                var responseData = ExtractDataFromFrame(responseFrame);
-
-                return new CommandResponse(responseData, command);
+                throw new InvalidOperationException("The commander isn't connected to a device.");
             }
 
-            throw new InvalidOperationException("The commander isn't connected to a device.");
+            var frame = PutDataIntoFrame(command.GetRawCommand());
+
+            var stream = _tcpClient.GetStream();
+
+            await stream.WriteAsync(frame, 0, frame.Length);
+
+            var responseFrame = new byte[ReceiveBufferLength];
+
+            await stream.ReadAsync(responseFrame, 0, ReceiveBufferLength);
+
+            var responseData = ExtractDataFromFrame(responseFrame);
+
+            return new CommandResponse(responseData, command);
         }
 
         public CommandResponse SendCommandWithMultiPacketResponse(Command command)
         {
-            if (_isConnected)
+            if (!_isConnected)
             {
-                var initialResponse = SendCommand(command);
-
-                if (!initialResponse.IsError && !IsLastResponse(initialResponse))
-                {
-                    var nextBlockCommand = CommandFactory.Instance.GetCommand(CommandId.NextBlock);
-                    nextBlockCommand.Header.Channel = Channel.None;
-                    var additionalData = new List<byte>();
-
-                    CommandResponse response;
-
-                    do
-                    {
-                        response = SendCommand(nextBlockCommand);
-
-                        if (!response.IsError)
-                        {
-                            additionalData.AddRange(response.GetBody());
-                        }
-
-                    } while (response.GetHeader().Extension2 == 0);
-
-                    // Concatenate the initial response's data with the additional data.
-                    initialResponse = new CommandResponse(
-                        initialResponse.RawData.Concat(additionalData).ToArray(), command);
-                }
-
-                return initialResponse; 
+                throw new InvalidOperationException("The commander isn't connected to a device.");
             }
 
-            throw new InvalidOperationException("The commander isn't connected to a device.");
+            var initialResponse = SendCommand(command);
+
+            if (!initialResponse.IsError && !IsLastResponse(initialResponse))
+            {
+                var nextBlockCommand = CommandFactory.Instance.GetCommand(CommandId.NextBlock);
+                nextBlockCommand.Header.Channel = Channel.None;
+                var additionalData = new List<byte>();
+
+                CommandResponse response;
+
+                do
+                {
+                    response = SendCommand(nextBlockCommand);
+
+                    if (!response.IsError)
+                    {
+                        additionalData.AddRange(response.GetBody());
+                    }
+
+                } while (response.GetHeader().Extension2 == 0);
+
+                // Concatenate the initial response's data with the additional data.
+                initialResponse = new CommandResponse(
+                    initialResponse.RawData.Concat(additionalData).ToArray(), command);
+            }
+
+            return initialResponse;
         }
 
         /// <summary>
@@ -312,9 +312,9 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
             var localIp = selector.GetLocalIpAddressInSameSubnet(_deviceEndPoint.Address, 
                 NetworkInterfaceSelector.Slash24SubnetMask);
 
-            if (selector == null)
+            if (localIp == null)
             {
-                throw new Exception("The ACO08 and this device are not in the same logical network. " +
+                throw new InvalidOperationException("The ACO08 and this device are not in the same logical network. " +
                                     "Please check the IP address and subnet mask configuration for both devices to ensure, " +
                                     "that they are in the same network.");
             }
