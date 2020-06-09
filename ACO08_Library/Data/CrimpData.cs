@@ -38,7 +38,7 @@ namespace ACO08_Library.Data
         {
             int index = 0;
             ReferenceId = BitConverter.ToUInt32(rawData, index);
-            index += sizeof(uint);
+            index = sizeof(uint);
 
             CrimpState = (CrimpState)BitConverter.ToUInt16(rawData, index);
             index += sizeof(ushort);
@@ -93,7 +93,7 @@ namespace ACO08_Library.Data
             UpperArea = BitConverter.ToSingle(rawData, index);
             index += sizeof(float);
 
-            InvertReadySignal = bool.Parse(BitConverter.ToUInt32(rawData, index).ToString());
+            InvertReadySignal = BitConverter.ToUInt32(rawData, index) > 0;
             index += sizeof(uint);
 
             UpperEnvelopeErrorCount = BitConverter.ToUInt32(rawData, index);

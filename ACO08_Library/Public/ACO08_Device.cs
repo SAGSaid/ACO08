@@ -61,7 +61,7 @@ namespace ACO08_Library.Public
         }
 
         /// <summary>
-        /// Starts listening for the CrimpDataChanged event and invokes its own event.
+        /// Starts listening for the UDP-events, handles them and invokes its own events.
         /// </summary>
         public void StartListeningForEvents()
         {
@@ -121,7 +121,7 @@ namespace ACO08_Library.Public
                 }
                 catch (Exception)
                 {
-
+                    // Connecting or initialization failed
                 }
             }
 
