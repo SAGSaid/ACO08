@@ -16,6 +16,7 @@ namespace ACO08_Library.Data
         public uint CrimpCounter { get; }
         public uint BadCrimpCounter { get; }
         public ushort Gain { get; }
+        public ushort Reserve { get; }
         public ACO_Time DateTime { get; }
         public float CalibrationFactor { get; }
         public int Drift { get; }
@@ -56,6 +57,9 @@ namespace ACO08_Library.Data
             index += sizeof(uint);
 
             Gain = BitConverter.ToUInt16(rawData, index);
+            index += sizeof(ushort);
+
+            Reserve = BitConverter.ToUInt16(rawData, index);
             index += sizeof(ushort);
 
             var dateBytes = new byte[8];

@@ -10,36 +10,38 @@ namespace ACO08_Library.Data
     public class ACO_Time
     {
         private const byte Padding = 0;
+        // Years are stored in bytes on the device.
+        // The year 2000 is equivalent to the stored year 0.
+        private const int YearOffset = 2000;
 
-        public byte YearMinus2000 { get; }
-        public byte Month { get; }
-        public DayOfWeek Weekday { get; }
-        public byte Day { get; }
-        public byte Hour { get; }
-        public byte Minute { get; }
         public byte Second { get; }
+        public byte Minute { get; }
+        public byte Hour { get; }
+        public byte Day { get; }
+        public DayOfWeek Weekday { get; }
+        public byte Month { get; }
+        public int Year { get; }
 
         public ACO_Time(byte[] rawBytes)
         {
-            // First byte is just padding
-            YearMinus2000 = rawBytes[1];
-            Month = rawBytes[2];
-            Weekday = (DayOfWeek)rawBytes[3];
-            Day = rawBytes[4];
-            Hour = rawBytes[5];
-            Minute = rawBytes[6];
-            Second = rawBytes[7];
+            Second = rawBytes[0];
+            Minute = rawBytes[1];
+            Hour = rawBytes[2];
+            Day = rawBytes[3];
+            Weekday = (DayOfWeek)rawBytes[4];
+            Month = rawBytes[5];
+            Year = rawBytes[6] + YearOffset;
         }
 
         public ACO_Time(DateTime time)
         {
-            YearMinus2000 = (byte)(time.Year - 2000);
-            Month = (byte)time.Month;
-            Weekday = time.DayOfWeek;
-            Day = (byte)time.Day;
-            Hour = (byte)time.Hour;
-            Minute = (byte)time.Minute;
             Second = (byte)time.Second;
+            Minute = (byte)time.Minute;
+            Hour = (byte)time.Hour;
+            Day = (byte)time.Day;
+            Weekday = time.DayOfWeek;
+            Month = (byte)time.Month;
+            Year = time.Year;
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace ACO08_Library.Data
         /// <returns>DateTime of equal value</returns>
         public DateTime ToDateTime()
         {
-            return new DateTime(YearMinus2000 + 2000, Month, Day, Hour, Minute, Second);
+            return new DateTime(Year, Month, Day, Hour, Minute, Second);
         }
 
         /// <summary>
@@ -57,16 +59,19 @@ namespace ACO08_Library.Data
         /// <returns>The instance's data in byte form</returns>
         public List<byte> ToBytes()
         {
+            // The data structure on the device is 8 bytes big,
+            // but only 7 of the bytes are used to store information.
+            // Last byte is just padding.
             return new List<byte>
             {
-                Padding,
-                YearMinus2000,
-                Month,
-                (byte)Weekday,
-                Day,
-                Hour,
+                Second,
                 Minute,
-                Second
+                Hour,
+                Day,
+                (byte)Weekday,
+                Month,
+                (byte)(Year - YearOffset),
+                Padding
             };
         }
     }
