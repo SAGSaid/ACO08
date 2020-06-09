@@ -13,8 +13,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
             <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
@@ -22,7 +22,7 @@
             <Button MinWidth="80" Command="{Binding Path=SetWorkmodeMeasureCommand}" Margin="5">Measure</Button>
             <Button MinWidth="80" Command="{Binding Path=SetWorkmodeMainCommand}" Margin="5">Main</Button>
         </StackPanel>
-        <StackPanel Grid.Row="0" Grid.Column="1">
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="5">
             <TextBlock>Current Workmode:</TextBlock>
             <TextBlock Text="{Binding Path=Device.CurrentWorkmode}"/>
         </StackPanel>
@@ -31,6 +31,12 @@
                 Command="{Binding Path=ShowOptionDialogCommand}"
                 HorizontalAlignment="Right">Options</Button>
 
+        <TextBlock Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Text="{Binding Path=TestText}"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Button Margin="5" Command="{Binding Path=ReferenceOkCommand}">RefOK</Button>
+            <Button Margin="5" Command="{Binding Path=ReferenceNotOkCommand}">RefNOK</Button>
+        </StackPanel>
 
     </Grid>
 </UserControl>

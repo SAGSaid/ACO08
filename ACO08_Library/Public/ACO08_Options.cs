@@ -81,8 +81,6 @@ namespace ACO08_Library.Public
 
         public string GetOptionList()
         {
-            CheckIsConnected();
-
             var command = CommandFactory.Instance.GetCommand(CommandId.GetOptionList);
 
             var response = Commander.SendCommandWithMultiPacketResponse(command);
@@ -94,8 +92,6 @@ namespace ACO08_Library.Public
 
         public void SaveSetup()
         {
-            CheckIsConnected();
-
             var command = CommandFactory.Instance.GetCommand(CommandId.SaveSetup);
 
             var response = Commander.SendCommand(command);
@@ -105,8 +101,6 @@ namespace ACO08_Library.Public
 
         public bool GetBooleanOption(OptionId id)
         {
-            CheckIsConnected();
-
             var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
 
             command.Header.Extension1 = (byte)id;
@@ -121,8 +115,6 @@ namespace ACO08_Library.Public
 
         public float GetFloatOption(OptionId id)
         {
-            CheckIsConnected();
-
             var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
 
             command.Header.Extension1 = (byte)id;
@@ -136,8 +128,6 @@ namespace ACO08_Library.Public
 
         public int GetIntOption(OptionId id)
         {
-            CheckIsConnected();
-
             var command = CommandFactory.Instance.GetCommand(CommandId.GetOption);
 
             command.Header.Extension1 = (byte)id;
@@ -151,8 +141,6 @@ namespace ACO08_Library.Public
 
         private void SetBooleanOption(OptionId id, bool value)
         {
-            CheckIsConnected();
-
             var option = OptionFactory.Instance.CopyBoolOption(id);
 
             var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
@@ -172,8 +160,6 @@ namespace ACO08_Library.Public
 
         private void SetFloatOption(OptionId id, float value)
         {
-            CheckIsConnected();
-
             var option = OptionFactory.Instance.CopyFloatOption(id);
 
             var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
@@ -191,8 +177,6 @@ namespace ACO08_Library.Public
 
         private void SetIntOption(OptionId id, int value)
         {
-            CheckIsConnected();
-
             var option = OptionFactory.Instance.CopyIntOption(id);
 
             var command = CommandFactory.Instance.GetCommand(CommandId.SetOption);
@@ -207,15 +191,7 @@ namespace ACO08_Library.Public
 
             ACO08_Exception.ThrowOnResponseError(response);
         }
-
-        private void CheckIsConnected()
-        {
-            if (!IsConnected)
-            {
-                throw new InvalidOperationException("The device is not connected.");
-            }
-        }
-
+        
         private void ResetChanges()
         {
             _changedBoolOptions.Clear();

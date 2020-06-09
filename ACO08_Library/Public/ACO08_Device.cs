@@ -134,7 +134,7 @@ namespace ACO08_Library.Public
             {
                 var command = CommandFactory.Instance.GetCommand(CommandId.GetCrimpData);
 
-                var response = _commander.SendCommand(command);
+                var response = _commander.SendCommandWithMultiPacketResponse(command);
 
                 if (!response.IsError)
                 {
@@ -167,8 +167,6 @@ namespace ACO08_Library.Public
 
         public Version GetVersion()
         {
-            CheckIsConnected();
-
             var command = CommandFactory.Instance.GetCommand(CommandId.GetVersion);
 
             var response = _commander.SendCommand(command);
@@ -182,8 +180,6 @@ namespace ACO08_Library.Public
 
         public Workmode GetWorkmode()
         {
-            CheckIsConnected();
-
             var command = CommandFactory.Instance.GetCommand(CommandId.GetWorkmode);
 
             var response = _commander.SendCommand(command);
@@ -212,8 +208,6 @@ namespace ACO08_Library.Public
 
         private void SetWorkmode(CommandId id)
         {
-            CheckIsConnected();
-
             var command = CommandFactory.Instance.GetCommand(id);
 
             var response = _commander.SendCommand(command);
@@ -221,15 +215,25 @@ namespace ACO08_Library.Public
             ACO08_Exception.ThrowOnResponseError(response);
         }
 
-        #endregion
-
-        private void CheckIsConnected()
+        public void ReferenceOk()
         {
-            if (!IsConnected)
-            {
-                throw new InvalidOperationException("The device is not connected.");
-            }
+            var command = CommandFactory.Instance.GetCommand(CommandId.ReferenceOk);
+
+            var response = _commander.SendCommand(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
         }
+
+        public void ReferenceNotOk()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.ReferenceNotOk);
+
+            var response = _commander.SendCommand(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+        }
+
+        #endregion
 
 
         /// <summary>
