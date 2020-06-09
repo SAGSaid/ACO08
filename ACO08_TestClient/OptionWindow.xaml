@@ -1,7 +1,10 @@
 ﻿<Window x:Class="ACO08_TestClient.OptionWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ACO08 Options" Height="450" Width="800">
+        Title="ACO08 Options" Height="450" Width="800" x:Name="Frame">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CommandBinding_OnExecuted"/>
+    </Window.CommandBindings>
 
     <!--TEMPLATES-->
     <Window.Resources>
@@ -52,15 +55,23 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
 
         <ItemsControl ItemsSource="{Binding Path=Options.BoolOptions}" 
                       ItemTemplate="{StaticResource BoolOptionTemplate}"/>
 
-        <ItemsControl Grid.Column="1" ItemsSource="{Binding Path=Options.FloatOptions}"
+        <ItemsControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=Options.FloatOptions}"
                       ItemTemplate="{StaticResource FloatOptionTemplate}"/>
 
-        <ItemsControl Grid.Column="2" ItemsSource="{Binding Path=Options.IntOptions}"
+        <ItemsControl Grid.Row="0" Grid.Column="2" ItemsSource="{Binding Path=Options.IntOptions}"
                       ItemTemplate="{StaticResource IntOptionTemplate}"/>
 
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
+            <Button Command="{Binding Path=CommitChangesCommand}" CommandParameter="{Binding ElementName=Frame}" Margin="10">Commit Changes</Button>
+            <Button Command="ApplicationCommands.Close" Margin="10" MinWidth="100">Cancel</Button>
+        </StackPanel>
     </Grid>
 </Window>

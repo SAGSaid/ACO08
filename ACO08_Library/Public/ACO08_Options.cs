@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,13 @@ namespace ACO08_Library.Public
         public Option<float>[] FloatOptions { get; }
         public Option<int>[] IntOptions { get; }
 
+        private readonly List<Option<bool>> _changedBoolOptions = 
+            new List<Option<bool>>();
+        private readonly List<Option<float>> _changedFloatOptions = 
+            new List<Option<float>>();
+        private readonly List<Option<int>> _changedIntOptions = 
+            new List<Option<int>>();
+
         internal ACO08_Options()
         {
             var factory = OptionFactory.Instance;
@@ -49,15 +57,26 @@ namespace ACO08_Library.Public
             get { return Commander?.IsConnected ?? false; }
         }
 
-        public void UpdateOptions()
+        public void GetAll()
         {
             _isUpdating = true;
 
+            ResetChanges();
+            
             BoolOptions.ForEach(option => option.Value = GetBooleanOption(option.Id));
             FloatOptions.ForEach(option => option.Value = GetFloatOption(option.Id));
             IntOptions.ForEach(option => option.Value = GetIntOption(option.Id));
 
             _isUpdating = false;
+        }
+
+        public void SetChangedOptions()
+        {
+            _changedBoolOptions.ForEach(option => SetBooleanOption(option.Id, option.Value));
+            _changedFloatOptions.ForEach(option => SetFloatOption(option.Id, option.Value));
+            _changedIntOptions.ForEach(option => SetIntOption(option.Id, option.Value));
+
+            ResetChanges();
         }
 
         public string GetOptionList()
@@ -205,6 +224,13 @@ namespace ACO08_Library.Public
             }
         }
 
+        private void ResetChanges()
+        {
+            _changedBoolOptions.Clear();
+            _changedFloatOptions.Clear();
+            _changedIntOptions.Clear();
+        }
+
         private void OptionValueChangedHandler(object sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName == "Value" && !_isUpdating)
@@ -212,15 +238,15 @@ namespace ACO08_Library.Public
                 switch (sender)
                 {
                     case Option<bool> option:
-                        SetBooleanOption(option.Id, option.Value);
+                        _changedBoolOptions.Add(option);
                         break;
 
                     case Option<float> option:
-                        SetFloatOption(option.Id, option.Value);
+                        _changedFloatOptions.Add(option);
                         break;
 
                     case Option<int> option:
-                        SetIntOption(option.Id, option.Value);
+                        _changedIntOptions.Add(option);
                         break;
 
                     default:
