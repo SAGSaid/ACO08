@@ -87,7 +87,7 @@ namespace ACO08_Library.Public
 
             var response = Commander.SendCommandWithMultiPacketResponse(command);
 
-            ThrowOnResponseError(response);
+            ACO08_Exception.ThrowOnResponseError(response);
 
             return Encoding.Unicode.GetString(response.GetBody());
         }
@@ -100,7 +100,7 @@ namespace ACO08_Library.Public
 
             var response = Commander.SendCommand(command);
 
-            ThrowOnResponseError(response);
+            ACO08_Exception.ThrowOnResponseError(response);
         }
 
         public bool GetBooleanOption(OptionId id)
@@ -113,7 +113,7 @@ namespace ACO08_Library.Public
 
             var response = Commander.SendCommand(command);
 
-            ThrowOnResponseError(response);
+            ACO08_Exception.ThrowOnResponseError(response);
 
             // Is any of the bits in the body set?
             return response.GetBody().Any(b => b != 0);
@@ -129,7 +129,7 @@ namespace ACO08_Library.Public
 
             var response = Commander.SendCommand(command);
 
-            ThrowOnResponseError(response);
+            ACO08_Exception.ThrowOnResponseError(response);
 
             return BitConverter.ToSingle(response.GetBody(), 0);
         }
@@ -144,7 +144,7 @@ namespace ACO08_Library.Public
 
             var response = Commander.SendCommand(command);
 
-            ThrowOnResponseError(response);
+            ACO08_Exception.ThrowOnResponseError(response);
 
             return BitConverter.ToInt32(response.GetBody(), 0);
         }
@@ -167,7 +167,7 @@ namespace ACO08_Library.Public
 
             var response = Commander.SendCommand(command);
 
-            ThrowOnResponseError(response);
+            ACO08_Exception.ThrowOnResponseError(response);
         }
 
         private void SetFloatOption(OptionId id, float value)
@@ -186,7 +186,7 @@ namespace ACO08_Library.Public
 
             var response = Commander.SendCommand(command);
 
-            ThrowOnResponseError(response);
+            ACO08_Exception.ThrowOnResponseError(response);
         }
 
         private void SetIntOption(OptionId id, int value)
@@ -205,7 +205,7 @@ namespace ACO08_Library.Public
 
             var response = Commander.SendCommand(command);
 
-            ThrowOnResponseError(response);
+            ACO08_Exception.ThrowOnResponseError(response);
         }
 
         private void CheckIsConnected()
@@ -213,14 +213,6 @@ namespace ACO08_Library.Public
             if (!IsConnected)
             {
                 throw new InvalidOperationException("The device is not connected.");
-            }
-        }
-
-        private static void ThrowOnResponseError(CommandResponse response)
-        {
-            if (response.IsError)
-            {
-                throw new ACO08_Exception((ErrorId)response.GetBody().Last());
             }
         }
 

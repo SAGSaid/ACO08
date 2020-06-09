@@ -167,70 +167,69 @@ namespace ACO08_Library.Public
 
         public Version GetVersion()
         {
-            if (IsConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.GetVersion);
+            CheckIsConnected();
 
-                var response = _commander.SendCommand(command);
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetVersion);
 
-                if (!response.IsError)
-                {
-                    var body = response.GetBody();
-                    
-                    return new Version(body[0], body[1], body[2]);
-                }
-            }
+            var response = _commander.SendCommand(command);
 
-            return new Version();
+            ACO08_Exception.ThrowOnResponseError(response);
+
+            var body = response.GetBody();
+
+            return new Version(body[0], body[1], body[2]);
         }
 
         public Workmode GetWorkmode()
         {
-            if (IsConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(CommandId.GetWorkmode);
+            CheckIsConnected();
 
-                var response = _commander.SendCommand(command);
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetWorkmode);
 
-                CurrentWorkmode = (Workmode)response.GetHeader().Extension1;
+            var response = _commander.SendCommand(command);
 
-                return CurrentWorkmode;
-            }
+            ACO08_Exception.ThrowOnResponseError(response);
 
-            throw new InvalidOperationException("The device is not connected.");
+            CurrentWorkmode = (Workmode)response.GetHeader().Extension1;
+
+            return CurrentWorkmode;
         }
 
-        public bool SetWorkmodeMain()
+        public void SetWorkmodeMain()
         {
-            return SetWorkmode(CommandId.SetWorkmodeMain);
+            SetWorkmode(CommandId.SetWorkmodeMain);
         }
 
-        public bool SetWorkmodeMeasure()
+        public void SetWorkmodeMeasure()
         {
-            return SetWorkmode(CommandId.SetWorkmodeReference);
+            SetWorkmode(CommandId.SetWorkmodeReference);
         }
 
-        public bool SetWorkmodeReference()
+        public void SetWorkmodeReference()
         {
-            return SetWorkmode(CommandId.SetWorkmodeReference);
+            SetWorkmode(CommandId.SetWorkmodeReference);
         }
 
-        private bool SetWorkmode(CommandId id)
+        private void SetWorkmode(CommandId id)
         {
-            if (IsConnected)
-            {
-                var command = CommandFactory.Instance.GetCommand(id);
+            CheckIsConnected();
 
-                var response = _commander.SendCommand(command);
+            var command = CommandFactory.Instance.GetCommand(id);
 
-                return !response.IsError;
-            }
+            var response = _commander.SendCommand(command);
 
-            throw new InvalidOperationException("The device is not connected.");
+            ACO08_Exception.ThrowOnResponseError(response);
         }
-        
+
         #endregion
 
+        private void CheckIsConnected()
+        {
+            if (!IsConnected)
+            {
+                throw new InvalidOperationException("The device is not connected.");
+            }
+        }
 
 
         /// <summary>

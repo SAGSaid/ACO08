@@ -31,7 +31,7 @@ namespace ACO08_Library.Communication.Protocol
 
         internal Option(OptionId id, T defaultValue, IValidateData<T> validateValue = null)
         {
-            _validator = validateValue ?? new NonValidatingValidator<T>();
+            _validator = validateValue ?? NonValidatingValidator<T>.Instance;
 
             // Usually throwing in constructor is finicky, but this helps during debugging.
             // It doesn't create runtime issues.
