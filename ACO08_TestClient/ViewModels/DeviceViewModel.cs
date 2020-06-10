@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
 using ACO08_Library.Enums;
 using ACO08_Library.Public;
 using ACO08_TestClient.Tools;
@@ -9,10 +12,21 @@ namespace ACO08_TestClient.ViewModels
 {
     public class DeviceViewModel : INotifyPropertyChanged
     {
+        private readonly Dispatcher _dispatcher;
+        private PointCollection _crimpPoints;
+
         public ACO08_Device Device { get; }
 
-        //TODO Remove
-        public string TestText { get; set; }
+        public PointCollection CrimpPoints
+        {
+            get { return _crimpPoints; }
+            private set
+            {
+                _crimpPoints = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public ICommand SetWorkmodeMainCommand { get; }
         public ICommand SetWorkmodeMeasureCommand { get; }
@@ -23,8 +37,12 @@ namespace ACO08_TestClient.ViewModels
 
         public DeviceViewModel(ACO08_Device device)
         {
+            _dispatcher = Dispatcher.CurrentDispatcher;
+
             Device = device;
             Device.CrimpDataReceived += CrimpDataChangedHandler;
+
+            CrimpPoints = new PointCollection();
 
             #region Command Init
 
@@ -86,7 +104,15 @@ namespace ACO08_TestClient.ViewModels
 
         private void CrimpDataChangedHandler(object sender, CrimpDataReceivedEventArgs args)
         {
-            TestText = args.Data.ToString();
+            var crimpData = args.Data.MeasureData;
+            var newCrimpPoints = new PointCollection();
+
+            for (int i = 0; i < crimpData.Count; i++)
+            {
+                newCrimpPoints.Add(new Point(i,crimpData[i]));
+            }
+
+            _dispatcher.Invoke(() => CrimpPoints = newCrimpPoints);
         }
 
 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -31,12 +32,16 @@
                 Command="{Binding Path=ShowOptionDialogCommand}"
                 HorizontalAlignment="Right">Options</Button>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Text="{Binding Path=TestText}"/>
-
         <StackPanel Grid.Row="1" Grid.Column="0">
             <Button Margin="5" Command="{Binding Path=ReferenceOkCommand}">RefOK</Button>
             <Button Margin="5" Command="{Binding Path=ReferenceNotOkCommand}">RefNOK</Button>
         </StackPanel>
+
+        <DockPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+            <Canvas>
+                <Polyline Points="{Binding Path=CrimpPoints}"></Polyline>
+            </Canvas>
+        </DockPanel>
 
     </Grid>
 </UserControl>
