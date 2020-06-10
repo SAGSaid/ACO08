@@ -16,6 +16,7 @@ namespace ACO08_Library.Communication.Protocol
         public CommandHeader(CommandId id)
         {
             Id = id;
+            Channel = Channel.Channel1;
         }
 
         /// <summary>

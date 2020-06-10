@@ -9,6 +9,8 @@ namespace ACO08_Library.Data
     /// </summary>
     public class CrimpData
     {
+        private const int MeasureDataPoints = 512;
+
         public uint ReferenceId { get; }
         public CrimpState CrimpState { get; }
         public short CrimpForce { get; }
@@ -33,7 +35,7 @@ namespace ACO08_Library.Data
         public uint LowerEnvelopeErrorCount { get; }
         public uint UpperTroubleError { get; }
         public uint LowerTroubleError { get; }
-        public short[] MeasureData { get;}
+        public List<short> MeasureData { get; }
 
         public CrimpData(byte[] rawData)
         {
@@ -112,14 +114,13 @@ namespace ACO08_Library.Data
             LowerTroubleError = BitConverter.ToUInt32(rawData, index);
             index += sizeof(uint);
 
-            var measureData = new List<short>();
+            MeasureData = new List<short>(MeasureDataPoints);
 
             for (; index < rawData.Length; index += sizeof(short))
             {
-                measureData.Add(BitConverter.ToInt16(rawData, index));
+                MeasureData.Add(BitConverter.ToInt16(rawData, index));
             }
 
-            MeasureData = measureData.ToArray();
         }
 
     }

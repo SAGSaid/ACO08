@@ -6,9 +6,7 @@
     /// </summary>
     internal enum Channel : byte
     {
-        None = 0,
-        Channel1 = 1,
-        Channel2 = 2,
-        Both = 3
+        Channel1 = 0,
+        Channel2 = 1
     }
 }

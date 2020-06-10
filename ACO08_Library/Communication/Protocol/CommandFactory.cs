@@ -31,279 +31,165 @@ namespace ACO08_Library.Communication.Protocol
             _commands = new[]
             {
                 new Command(
-                    new CommandHeader(CommandId.GetVersion)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetVersion),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetWorkmode)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetWorkmode),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.SetWorkmodeMain)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.SetWorkmodeMain),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.SetWorkmodeMeasure)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.SetWorkmodeMeasure),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.SetWorkmodeReference)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.SetWorkmodeReference),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.SetWorkmodeTest)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.SetWorkmodeTest),
                     Workmode.Main | Workmode.Test),
 
                 new Command(
-                    new CommandHeader(CommandId.GetCrimpData)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetCrimpData),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.NextBlock)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.NextBlock),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetCrimpCounter)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetCrimpCounter),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetReferenceData)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetReferenceData),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetLowerEnvelope)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetLowerEnvelope),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetUpperEnvelope)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetUpperEnvelope),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.Reset)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.Reset),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetTime)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetTime),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.SetTime)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.SetTime),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.GetOptionList)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.GetOptionList),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.GetOption)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetOption),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.SetOption)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.SetOption),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.SaveSetup)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.SaveSetup),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.ReferenceOk)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.ReferenceOk),
                     Workmode.ValidReference | 
                     Workmode.InvalidReference),
 
                 new Command(
-                    new CommandHeader(CommandId.ReferenceNotOk)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.ReferenceNotOk),
                     Workmode.ValidReference | 
                     Workmode.InvalidReference),
 
                 new Command(
-                    new CommandHeader(CommandId.GetForce)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetForce),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetSerialNumber)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.GetSerialNumber),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetDebugMessageTypes)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.GetDebugMessageTypes),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.SetDebugMessageTypes)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.SetDebugMessageTypes),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.GetLCD_Activation)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.GetLCD_Activation),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.SetLCD_Activation)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.SetLCD_Activation),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.GetGPIO_Function)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.GetGPIO_Function),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.SetGPIO_Function)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.SetGPIO_Function),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.ResetFactorySetup)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.ResetFactorySetup),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.GetGPIO_Status)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.GetGPIO_Status),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.ReadCrimpRecord)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.ReadCrimpRecord),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.GetTrendList)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetTrendList),
                     Workmode.Main),
 
                 new Command(
-                    new CommandHeader(CommandId.SetMultireference)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.SetMultireference),
                     Workmode.Main |
                     Workmode.Measure |
                     Workmode.Reference |
                     Workmode.Test),
 
                 new Command(
-                    new CommandHeader(CommandId.GetMultireference)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.GetMultireference),
                     Workmode.Main |
                     Workmode.Measure |
                     Workmode.Reference |
                     Workmode.Test),
 
                 new Command(
-                    new CommandHeader(CommandId.GetAreaDeviation)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetAreaDeviation),
                     Workmode.All),
 
                 new Command(
-                    new CommandHeader(CommandId.GetMaxima)
-                    {
-                        Channel = Channel.Channel1
-                    },
+                    new CommandHeader(CommandId.GetMaxima),
                     Workmode.Main |
                     Workmode.Measure |
                     Workmode.Reference),
 
                 new Command(
-                    new CommandHeader(CommandId.GetMaxima)
-                    {
-                        Channel = Channel.None
-                    },
+                    new CommandHeader(CommandId.GetMaxima),
                     Workmode.Main |
                     Workmode.Measure |
                     Workmode.Reference)

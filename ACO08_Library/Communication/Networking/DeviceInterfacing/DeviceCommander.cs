@@ -170,7 +170,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
             if (!initialResponse.IsError && !IsLastResponse(initialResponse))
             {
                 var nextBlockCommand = CommandFactory.Instance.GetCommand(CommandId.NextBlock);
-                nextBlockCommand.Header.Channel = Channel.None;
+                nextBlockCommand.Header.Channel = command.Header.Channel;
                 var additionalData = new List<byte>();
 
                 CommandResponse response;
