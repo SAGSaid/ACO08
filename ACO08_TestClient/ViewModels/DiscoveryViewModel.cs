@@ -11,7 +11,6 @@ using ACO08_Library.Communication.Networking.DeviceInterfacing;
 using ACO08_Library.Public;
 using ACO08_TestClient.Tools;
 using ACO08_TestClient.Views;
-using AsyncAwaitBestPractices.MVVM;
 
 namespace ACO08_TestClient.ViewModels
 {
@@ -67,7 +66,7 @@ namespace ACO08_TestClient.ViewModels
             StopDiscoveringCommand = 
                 new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
             StartConnectingCommand =
-                new AsyncCommand<object>(StartConnectingExecute, StartConnectingCanExecute);
+                new RelayCommand(StartConnectingExecute, StartConnectingCanExecute);
             ClearDevicesCommand = 
                 new RelayCommand(ClearDevicesExecute);
             #endregion
@@ -95,7 +94,7 @@ namespace ACO08_TestClient.ViewModels
             }
         }
 
-        private async Task StartConnectingExecute(object parameter)
+        private async void StartConnectingExecute(object parameter)
         {
             if (parameter is ACO08_Device device)
             {

@@ -35,14 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AsyncAwaitBestPractices, Version=1.0.0.0, Culture=neutral, PublicKeyToken=532360cfd341384d, processorArchitecture=MSIL">
-      <HintPath>..\packages\AsyncAwaitBestPractices.4.1.0\lib\netstandard1.0\AsyncAwaitBestPractices.dll</HintPath>
-    </Reference>
-    <Reference Include="AsyncAwaitBestPractices.MVVM, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fd3d463fd20deb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\AsyncAwaitBestPractices.MVVM.4.1.0\lib\netstandard1.0\AsyncAwaitBestPractices.MVVM.dll</HintPath>
-    </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
