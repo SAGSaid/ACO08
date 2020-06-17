@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 using ACO08_Library.Enums;
 using ACO08_Library.Public;
 using ACO08_TestClient.Tools;
@@ -12,21 +11,9 @@ namespace ACO08_TestClient.ViewModels
 {
     public class DeviceViewModel : INotifyPropertyChanged
     {
-        private readonly Dispatcher _dispatcher;
-        private PointCollection _crimpPoints;
-
         public ACO08_Device Device { get; }
 
-        public PointCollection CrimpPoints
-        {
-            get { return _crimpPoints; }
-            private set
-            {
-                _crimpPoints = value;
-                OnPropertyChanged();
-            }
-        }
-
+        public List<MeasurePoint> Points { get; private set; } = new List<MeasurePoint>();
 
         public ICommand SetWorkmodeMainCommand { get; }
         public ICommand SetWorkmodeMeasureCommand { get; }
@@ -37,12 +24,8 @@ namespace ACO08_TestClient.ViewModels
 
         public DeviceViewModel(ACO08_Device device)
         {
-            _dispatcher = Dispatcher.CurrentDispatcher;
-
             Device = device;
             Device.CrimpDataReceived += CrimpDataChangedHandler;
-
-            CrimpPoints = new PointCollection();
 
             #region Command Init
 
@@ -105,14 +88,12 @@ namespace ACO08_TestClient.ViewModels
         private void CrimpDataChangedHandler(object sender, CrimpDataReceivedEventArgs args)
         {
             var crimpData = args.Data.MeasureData;
-            var newCrimpPoints = new PointCollection();
 
-            for (int i = 0; i < crimpData.Count; i++)
-            {
-                newCrimpPoints.Add(new Point(i,crimpData[i]));
-            }
+            var points = crimpData.Select((measurement, index) => new MeasurePoint{Measurement = measurement, YAxis = index});
 
-            _dispatcher.Invoke(() => CrimpPoints = newCrimpPoints);
+            Points = points.ToList();
+
+            OnPropertyChanged(nameof(Points));
         }
 
 

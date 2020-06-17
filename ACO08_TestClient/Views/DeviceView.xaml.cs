@@ -11,9 +11,9 @@ namespace ACO08_TestClient.Views
     {
         public DeviceView(ACO08_Device device)
         {
-            DataContext = new DeviceViewModel(device);
-
             InitializeComponent();
+
+            DataContext = new DeviceViewModel(device);
         }
     }
 }

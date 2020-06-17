@@ -7,10 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <DataTemplate x:Key="PointTemplate">
+            <Ellipse Height="3" Width="3" Fill="Black"/>
+        </DataTemplate>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -37,10 +43,19 @@
             <Button Margin="5" Command="{Binding Path=ReferenceNotOkCommand}">RefNOK</Button>
         </StackPanel>
 
-        <DockPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
-            <Canvas>
-                <Polyline Points="{Binding Path=CrimpPoints}"></Polyline>
-            </Canvas>
+        <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
+            <telerik:RadCartesianChart>
+                <telerik:LineSeries ValueBinding="Measurement" CategoryBinding="YAxis" ItemsSource="{Binding Path=Points}" 
+                                    PointTemplate="{StaticResource PointTemplate}" Stroke="Black" StrokeThickness="3">
+                    <telerik:LineSeries.HorizontalAxis>
+                        <telerik:LinearAxis Minimum="0" Maximum="600"/>
+                    </telerik:LineSeries.HorizontalAxis>
+                    <telerik:LineSeries.VerticalAxis>
+                        <telerik:LinearAxis/>
+                    </telerik:LineSeries.VerticalAxis>
+                </telerik:LineSeries>
+
+            </telerik:RadCartesianChart>
         </DockPanel>
 
     </Grid>
