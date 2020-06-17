@@ -21,6 +21,10 @@ namespace ACO08_Library.Public
         private bool _isListeningForEvents = false;
         private Workmode _currentWorkmode = Workmode.Undefined;
 
+        private CrimpData _reference;
+        private CrimpData _lowerEnvelope;
+        private CrimpData _upperEnvelope;
+
         public uint SerialNumber { get; }
         public IPAddress Address { get; }
         public ACO08_Options Options { get; }
@@ -46,6 +50,36 @@ namespace ACO08_Library.Public
             private set
             {
                 _currentWorkmode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CrimpData Reference
+        {
+            get { return _reference; }
+            set
+            {
+                _reference = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CrimpData LowerEnvelope
+        {
+            get { return _lowerEnvelope; }
+            set
+            {
+                _lowerEnvelope = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CrimpData UpperEnvelope
+        {
+            get { return _upperEnvelope; }
+            set
+            {
+                _upperEnvelope = value;
                 OnPropertyChanged();
             }
         }
@@ -227,6 +261,110 @@ namespace ACO08_Library.Public
         public void ReferenceNotOk()
         {
             var command = CommandFactory.Instance.GetCommand(CommandId.ReferenceNotOk);
+
+            var response = _commander.SendCommand(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+        }
+
+        public uint GetCrimpCounter()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetCrimpCounter);
+
+            var response = _commander.SendCommand(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+
+            var counter = BitConverter.ToUInt32(response.GetBody(), 0);
+
+            return counter;
+        }
+
+        public void GetReferenceData()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetReferenceData);
+
+            var response = _commander.SendCommandWithMultiPacketResponse(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+
+            Reference = new CrimpData(response.GetBody());
+        }
+
+        public void GetLowerEnvelope()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetLowerEnvelope);
+
+            var response = _commander.SendCommandWithMultiPacketResponse(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+
+            LowerEnvelope = new CrimpData(response.GetBody());
+        }
+
+        public void GetUpperEnvelope()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetUpperEnvelope);
+
+            var response = _commander.SendCommandWithMultiPacketResponse(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+
+            UpperEnvelope = new CrimpData(response.GetBody());
+        }
+
+        public void SoftReset()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.Reset);
+
+            var response = _commander.SendCommand(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+        }
+
+        public DateTime GetTime()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetTime);
+
+            var response = _commander.SendCommand(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+
+            var systemTime = new ACO_Time(response.GetBody());
+
+            return systemTime.ToDateTime();
+        }
+
+        public void SetTime(DateTime dateTime)
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.SetTime);
+
+            var systemTime = new ACO_Time(dateTime);
+
+            command.Body.AddRange(systemTime.ToBytes());
+
+            var response = _commander.SendCommand(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+        }
+
+        public short GetForce()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.GetForce);
+
+            var response = _commander.SendCommand(command);
+
+            ACO08_Exception.ThrowOnResponseError(response);
+
+            var force = BitConverter.ToInt16(response.GetBody(), 0);
+
+            return force;
+        }
+
+        [Browsable(false)]
+        public void FactoryReset()
+        {
+            var command = CommandFactory.Instance.GetCommand(CommandId.ResetFactorySetup);
 
             var response = _commander.SendCommand(command);
 
