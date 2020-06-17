@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -13,28 +14,17 @@ using ACO08_TestClient.Views;
 
 namespace ACO08_TestClient.ViewModels
 {
-    public class DiscoveryViewModel : INotifyPropertyChanged
+    public class DiscoveryViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly DockPanel _container;
         private readonly Dispatcher _dispatcher;
 
-        private bool _isLocating = false;
         private bool _isConnecting = false;
 
-        private DeviceLocator _locator;
+        private readonly DeviceLocator _locator;
 
         public ObservableCollection<ACO08_Device> Devices { get; } =
             new ObservableCollection<ACO08_Device>();
-
-        public bool IsLocating
-        {
-            get { return _isLocating; }
-            private set
-            {
-                _isLocating = value;
-                OnPropertyChanged();
-            }
-        }
 
         public bool IsConnecting
         {
@@ -46,8 +36,6 @@ namespace ACO08_TestClient.ViewModels
             }
         }
 
-        public ICommand StartDiscoveringCommand { get; }
-        public ICommand StopDiscoveringCommand { get; }
         public ICommand StartConnectingCommand { get; }
         public ICommand ClearDevicesCommand { get; }
 
@@ -58,39 +46,18 @@ namespace ACO08_TestClient.ViewModels
 
             _dispatcher = Dispatcher.CurrentDispatcher;
 
+            _locator = new DeviceLocator();
+            _locator.DeviceLocated += DeviceLocatedHandler;
+            _locator.StartLocating();
+
             #region Commands Init
 
-            StartDiscoveringCommand = 
-                new RelayCommand(StartDiscoveringExecute, _ => !IsLocating);
-            StopDiscoveringCommand = 
-                new RelayCommand(StopDiscoveringExecute, _ => IsLocating);
             StartConnectingCommand =
-                new RelayCommand(StartConnectingExecute, StartConnectingCanExecute);
+                new RelayCommand(StartConnectingExecute);
             ClearDevicesCommand = 
                 new RelayCommand(ClearDevicesExecute);
+
             #endregion
-        }
-
-        private void StartDiscoveringExecute(object parameter)
-        {
-            if (!_isLocating)
-            {
-                IsLocating = true;
-                _locator = new DeviceLocator();
-                _locator.DeviceLocated += DeviceLocatedHandler;
-                _locator.StartLocating();
-            }
-        }
-
-        private void StopDiscoveringExecute(object parameter)
-        {
-            if (_isLocating)
-            {
-                IsLocating = false;
-                _locator.StopLocating();
-                _locator.DeviceLocated -= DeviceLocatedHandler;
-                _locator.Dispose();
-            }
         }
 
         private async void StartConnectingExecute(object parameter)
@@ -115,11 +82,6 @@ namespace ACO08_TestClient.ViewModels
             }
         }
 
-        private bool StartConnectingCanExecute(object parameter)
-        {
-            return !IsConnecting;
-        }
-
         private void ClearDevicesExecute(object parameter)
         {
             _dispatcher.Invoke(() => Devices.Clear());
@@ -133,6 +95,7 @@ namespace ACO08_TestClient.ViewModels
             }
         }
 
+        
 
         #region INotifyPropertyChanged
 
@@ -144,5 +107,10 @@ namespace ACO08_TestClient.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         } 
         #endregion
+
+        public void Dispose()
+        {
+            _locator?.Dispose();
+        }
     }
 }
