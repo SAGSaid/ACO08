@@ -16,7 +16,7 @@ namespace ACO08_TestClient.ViewModels
 {
     public class DiscoveryViewModel : INotifyPropertyChanged, IDisposable
     {
-        private readonly DockPanel _container;
+        private readonly Frame _container;
         private readonly Dispatcher _dispatcher;
 
         private bool _isConnecting = false;
@@ -39,10 +39,11 @@ namespace ACO08_TestClient.ViewModels
         public ICommand StartConnectingCommand { get; }
         public ICommand ClearDevicesCommand { get; }
 
-        public DiscoveryViewModel(DockPanel container)
+        public DiscoveryViewModel(Frame container)
         {
             _container = container;
-            _container.Children.Add(new DiscoveryView());
+
+            _container.Content = new DiscoveryView {DataContext = this};
 
             _dispatcher = Dispatcher.CurrentDispatcher;
 
@@ -72,8 +73,7 @@ namespace ACO08_TestClient.ViewModels
 
                 if (isConnected)
                 {
-                    _container.Children.Clear();
-                    _container.Children.Add(new DeviceView(device));
+                    _container.Content = new DeviceView(device);
                 }
                 else
                 {

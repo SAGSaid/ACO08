@@ -45,10 +45,13 @@
 
         <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
             <telerik:RadCartesianChart>
-                <telerik:LineSeries ValueBinding="Measurement" CategoryBinding="YAxis" ItemsSource="{Binding Path=Points}" 
-                                    PointTemplate="{StaticResource PointTemplate}" Stroke="Black" StrokeThickness="3">
+                <telerik:LineSeries ValueBinding="Measurement" 
+                                    CategoryBinding="YAxis" 
+                                    ItemsSource="{Binding Path=Points}" 
+                                    PointTemplate="{StaticResource PointTemplate}" 
+                                    Stroke="Black" StrokeThickness="3">
                     <telerik:LineSeries.HorizontalAxis>
-                        <telerik:LinearAxis Minimum="0" Maximum="600"/>
+                        <telerik:CategoricalAxis ShowLabels="True" MajorTickInterval="100"/>
                     </telerik:LineSeries.HorizontalAxis>
                     <telerik:LineSeries.VerticalAxis>
                         <telerik:LinearAxis/>

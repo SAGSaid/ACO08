@@ -12,7 +12,7 @@
             <StackPanel Margin="5" Orientation="Horizontal">
                 <TextBlock Text="{Binding Path=SerialNumber}" Margin="5"/>
                 <TextBlock Text="{Binding Path=Address}" Margin="5"/>
-                <Button Command="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, 
+                <Button Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}, 
                     Path=DataContext.StartConnectingCommand}" 
                         CommandParameter="{Binding Path=.}" Margin="5">Connect</Button>
             </StackPanel>
@@ -20,7 +20,8 @@
     </UserControl.Resources>
 
     <DockPanel Margin="10">
-            <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Width="150" Height="60" Margin="10" Command="{Binding Path=ClearDevicesCommand}">Clear Device List</Button>
+            <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Width="150" Height="60" Margin="10" 
+                    Command="{Binding Path=ClearDevicesCommand}">Clear Device List</Button>
             <ItemsControl Margin="10" ItemsSource="{Binding Path=Devices}" ItemTemplate="{StaticResource DeviceTemplate}"/>
     </DockPanel>
 
