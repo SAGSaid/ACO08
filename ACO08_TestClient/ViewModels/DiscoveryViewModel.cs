@@ -43,7 +43,7 @@ namespace ACO08_TestClient.ViewModels
         {
             _container = container;
 
-            _container.Content = new DiscoveryView {DataContext = this};
+            _container.Content = new DiscoveryView { DataContext = this };
 
             _dispatcher = Dispatcher.CurrentDispatcher;
 
@@ -55,7 +55,7 @@ namespace ACO08_TestClient.ViewModels
 
             StartConnectingCommand =
                 new RelayCommand(StartConnectingExecute);
-            ClearDevicesCommand = 
+            ClearDevicesCommand =
                 new RelayCommand(ClearDevicesExecute);
 
             #endregion
@@ -95,7 +95,6 @@ namespace ACO08_TestClient.ViewModels
             }
         }
 
-        
 
         #region INotifyPropertyChanged
 
@@ -105,7 +104,7 @@ namespace ACO08_TestClient.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        } 
+        }
         #endregion
 
         public void Dispose()

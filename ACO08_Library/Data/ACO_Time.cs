@@ -18,7 +18,7 @@ namespace ACO08_Library.Data
         public byte Minute { get; }
         public byte Hour { get; }
         public byte Day { get; }
-        public DayOfWeek Weekday { get; }
+        public byte Weekday { get; }
         public byte Month { get; }
         public int Year { get; }
 
@@ -28,7 +28,7 @@ namespace ACO08_Library.Data
             Minute = rawBytes[1];
             Hour = rawBytes[2];
             Day = rawBytes[3];
-            Weekday = (DayOfWeek)rawBytes[4];
+            Weekday = rawBytes[4];
             Month = rawBytes[5];
             Year = rawBytes[6] + YearOffset;
         }
@@ -39,7 +39,7 @@ namespace ACO08_Library.Data
             Minute = (byte)time.Minute;
             Hour = (byte)time.Hour;
             Day = (byte)time.Day;
-            Weekday = time.DayOfWeek;
+            Weekday = (byte)time.DayOfWeek;
             Month = (byte)time.Month;
             Year = time.Year;
         }
@@ -68,7 +68,7 @@ namespace ACO08_Library.Data
                 Minute,
                 Hour,
                 Day,
-                (byte)Weekday,
+                Weekday,
                 Month,
                 (byte)(Year - YearOffset),
                 Padding
