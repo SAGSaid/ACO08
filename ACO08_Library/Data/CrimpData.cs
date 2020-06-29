@@ -9,8 +9,6 @@ namespace ACO08_Library.Data
     /// </summary>
     public class CrimpData
     {
-        private const int MeasureDataPoints = 512;
-
         public uint ReferenceId { get; }
         public CrimpState CrimpState { get; }
         public short CrimpForce { get; }
@@ -114,7 +112,8 @@ namespace ACO08_Library.Data
             LowerTroubleError = BitConverter.ToUInt32(rawData, index);
             index += sizeof(uint);
 
-            MeasureData = new List<short>(MeasureDataPoints);
+            // Give the list an initial size, so there is only one memory allocation
+            MeasureData = new List<short>(rawData.Length - 92);
 
             for (; index < rawData.Length; index += sizeof(short))
             {

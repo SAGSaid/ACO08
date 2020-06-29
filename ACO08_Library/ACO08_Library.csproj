@@ -37,8 +37,6 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Communication\Networking\IpAddressExtensions.cs" />
-    <Compile Include="Communication\Networking\NetworkInterfaceSelector.cs" />
     <Compile Include="Communication\Protocol\ACO08_Exception.cs" />
     <Compile Include="Data\Validation\NonValidatingValidator.cs" />
     <Compile Include="Data\Validation\DistinctIntegersValidator.cs" />
@@ -47,10 +45,10 @@
     <Compile Include="Public\ACO08_Options.cs" />
     <Compile Include="Public\CrimpDataReceivedEventArgs.cs" />
     <Compile Include="Data\ACO_Time.cs" />
-    <Compile Include="Communication\Networking\DeviceInterfacing\DeviceCommander.cs" />
-    <Compile Include="Communication\Networking\DeviceInterfacing\DeviceEventListener.cs" />
-    <Compile Include="Communication\Networking\DeviceInterfacing\DeviceLocatedEventArgs.cs" />
-    <Compile Include="Communication\Networking\DeviceInterfacing\DeviceLocator.cs" />
+    <Compile Include="Communication\Network\DeviceCommander.cs" />
+    <Compile Include="Communication\Network\ACO08_EventListener.cs" />
+    <Compile Include="Communication\Network\DeviceLocatedEventArgs.cs" />
+    <Compile Include="Communication\Network\DeviceLocator.cs" />
     <Compile Include="Communication\Protocol\Command.cs" />
     <Compile Include="Communication\Protocol\CommandFactory.cs" />
     <Compile Include="Communication\Protocol\CommandHeader.cs" />

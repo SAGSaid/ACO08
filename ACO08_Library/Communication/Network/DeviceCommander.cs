@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using ACO08_Library.Communication.Protocol;
 using ACO08_Library.Enums;
 
-namespace ACO08_Library.Communication.Networking.DeviceInterfacing
+namespace ACO08_Library.Communication.Network
 {
     /// <summary>
     /// Manages the TCP connection with the device and sends/receives commands.
@@ -56,8 +56,7 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 
                 try
                 {
-                    _tcpClient = new TcpClient(
-                        new IPEndPoint(GetLocalIp(), Port));
+                    _tcpClient = new TcpClient();
 
                     _tcpClient.Connect(_deviceEndPoint);
                     return true;
@@ -83,9 +82,10 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
 
                 try
                 {
-                    _tcpClient = new TcpClient(new IPEndPoint(GetLocalIp(), Port));
+                    _tcpClient = new TcpClient();
 
                     await _tcpClient.ConnectAsync(_deviceEndPoint.Address, Port);
+
                     return true;
                 }
                 catch (SocketException)
@@ -305,22 +305,6 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
             return response.GetHeader().Extension2 == 1;
         }
 
-        private IPAddress GetLocalIp()
-        {
-            var selector = new NetworkInterfaceSelector();
-
-            var localIp = selector.GetLocalIpAddressInSameSubnet(_deviceEndPoint.Address, 
-                NetworkInterfaceSelector.Slash24SubnetMask);
-
-            if (localIp == null)
-            {
-                throw new InvalidOperationException("The ACO08 and this device are not in the same logical network. " +
-                                    "Please check the IP address and subnet mask configuration for both devices to ensure, " +
-                                    "that they are in the same network.");
-            }
-
-            return localIp;
-        }
 
         /// <summary>
         /// Closes the underlying TCP client.

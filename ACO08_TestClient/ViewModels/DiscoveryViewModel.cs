@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using ACO08_Library.Communication.Networking.DeviceInterfacing;
+using ACO08_Library.Communication.Network;
 using ACO08_Library.Public;
 using ACO08_TestClient.Tools;
 using ACO08_TestClient.Views;

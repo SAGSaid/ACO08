@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using ACO08_Library.Communication.Networking.DeviceInterfacing;
+using ACO08_Library.Communication.Network;
 using ACO08_Library.Communication.Protocol;
 using ACO08_Library.Data;
 using ACO08_Library.Enums;
@@ -15,7 +15,7 @@ namespace ACO08_Library.Public
     /// </summary>
     public sealed class ACO08_Device : IDisposable, INotifyPropertyChanged
     {
-        private DeviceEventListener _listener;
+        private ACO08_EventListener _listener;
         private DeviceCommander _commander;
 
         private bool _isListeningForEvents = false;
@@ -103,10 +103,9 @@ namespace ACO08_Library.Public
             {
                 IsListeningForEvents = true;
 
-                _listener = new DeviceEventListener();
+                _listener = ACO08_EventListener.Instance;
+                _listener.Subscribe4Events(this);
                 _listener.StartListening();
-                _listener.CrimpDataChanged += CrimpDataChangedHandler;
-                _listener.WorkmodeChanged += WorkmodeChangedHandler;
             }
         }
 
@@ -119,11 +118,7 @@ namespace ACO08_Library.Public
             {
                 IsListeningForEvents = false;
 
-                _listener.StopListening();
-                _listener.CrimpDataChanged -= CrimpDataChangedHandler;
-                _listener.WorkmodeChanged -= WorkmodeChangedHandler;
-                _listener.Dispose();
-                _listener = null;
+                _listener.UnsubscribeFromEvents(this);
             }
         }
 
@@ -162,7 +157,7 @@ namespace ACO08_Library.Public
             return false;
         }
 
-        private void CrimpDataChangedHandler(object sender, EventArgs args)
+        internal void CrimpDataChanged()
         {
             if (IsConnected)
             {
@@ -179,6 +174,16 @@ namespace ACO08_Library.Public
             }
         }
 
+        internal void WorkmodeChanged()
+        {
+            GetWorkmode();
+        }
+
+        internal void MultiReferenceChanged()
+        {
+            // Stub for possible future expansion
+        }
+
         private void IsConnectedChangedHandler(object sender, PropertyChangedEventArgs args)
         {
             if (args.PropertyName == nameof(_commander.IsConnected))
@@ -187,10 +192,6 @@ namespace ACO08_Library.Public
             }
         }
 
-        private void WorkmodeChangedHandler(object sender, EventArgs args)
-        {
-            GetWorkmode();
-        }
 
         private void OnCrimpDataReceived(CrimpDataReceivedEventArgs args)
         {

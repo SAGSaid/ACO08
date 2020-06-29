@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using ACO08_Library.Communication.Networking.DeviceInterfacing;
+using ACO08_Library.Communication.Network;
 using ACO08_Library.Communication.Protocol;
 using ACO08_Library.Enums;
 using ACO08_Library.Tools;
@@ -61,7 +61,7 @@ namespace ACO08_Library.Public
         {
             _isUpdating = true;
 
-            ResetChanges();
+            ResetChangedOptions();
             
             BoolOptions.ForEach(option => option.Value = GetBooleanOption(option.Id));
             FloatOptions.ForEach(option => option.Value = GetFloatOption(option.Id));
@@ -76,7 +76,7 @@ namespace ACO08_Library.Public
             _changedFloatOptions.ForEach(option => SetFloatOption(option.Id, option.Value));
             _changedIntOptions.ForEach(option => SetIntOption(option.Id, option.Value));
 
-            ResetChanges();
+            ResetChangedOptions();
         }
 
         public string GetOptionList()
@@ -192,7 +192,7 @@ namespace ACO08_Library.Public
             ACO08_Exception.ThrowOnResponseError(response);
         }
         
-        private void ResetChanges()
+        private void ResetChangedOptions()
         {
             _changedBoolOptions.Clear();
             _changedFloatOptions.Clear();

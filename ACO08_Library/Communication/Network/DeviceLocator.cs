@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace ACO08_Library.Communication.Networking.DeviceInterfacing
+namespace ACO08_Library.Communication.Network
 {
     /// <summary>
     /// Locates ACO08 devices on the network and
@@ -11,11 +11,10 @@ namespace ACO08_Library.Communication.Networking.DeviceInterfacing
     /// </summary>
     public sealed class DeviceLocator : IDisposable
     {
-        private const int BroadcastPort = 65531;
+        private const int DiscoveryBroadcastPort = 65531;
         private const string MessagePrefix = "CrimpNet";
 
-        private readonly UdpClient _udpClient = 
-            new UdpClient(new IPEndPoint(IPAddress.Any, BroadcastPort));
+        private readonly UdpClient _udpClient = new UdpClient(DiscoveryBroadcastPort);
 
         private bool _isLocating = false;
 
